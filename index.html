@@ -7,969 +7,520 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;500;700&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <style>
     :root {
-      --bg:        #0d0f14;
-      --bg2:       #141720;
-      --bg3:       #1c2030;
-      --border:    rgba(255,255,255,0.07);
-      --border2:   rgba(255,255,255,0.13);
-      --text:      #e8eaf0;
-      --text2:     #8b90a0;
-      --text3:     #555b6e;
-      --up:        #1fcf8a;
-      --down:      #f0614a;
-      --gold:      #f0b840;
-      --blue:      #4d9de0;
-      --accent:    #4d9de0;
-      --font:      'Syne', sans-serif;
-      --mono:      'IBM Plex Mono', monospace;
-      --radius:    8px;
-      --radius-lg: 14px;
+      --bg:     #0d0f14;
+      --bg2:    #141720;
+      --bg3:    #1c2030;
+      --bdr:    rgba(255,255,255,0.07);
+      --bdr2:   rgba(255,255,255,0.13);
+      --tx:     #e8eaf0;
+      --tx2:    #8b90a0;
+      --tx3:    #555b6e;
+      --up:     #1fcf8a;
+      --dn:     #f0614a;
+      --gold:   #f0b840;
+      --blue:   #4d9de0;
+      --font:   'Syne', sans-serif;
+      --mono:   'IBM Plex Mono', monospace;
+      --r:      8px;
+      --rl:     14px;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--tx); font-family: var(--font); font-size: 14px; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      font-size: 14px;
-      min-height: 100vh;
-    }
+    .shell { max-width: 1400px; margin: 0 auto; padding: 0 24px 64px; }
 
-    /* ── Layout ─────────────────────────────────────────── */
-    .shell { max-width: 1400px; margin: 0 auto; padding: 0 24px 48px; }
+    /* header */
+    .hdr { display:flex; justify-content:space-between; align-items:center; padding:28px 0 20px; border-bottom:0.5px solid var(--bdr2); margin-bottom:28px; gap:16px; flex-wrap:wrap; }
+    .hdr h1 { font-size:22px; font-weight:700; letter-spacing:-.02em; }
+    .hdr h1 span { color:var(--blue); }
+    .hdr-sub { font-size:12px; color:var(--tx3); margin-top:4px; font-family:var(--mono); }
+    .live { display:flex; align-items:center; gap:6px; font-size:11px; font-family:var(--mono); font-weight:500; }
+    .live::before { content:''; width:7px; height:7px; border-radius:50%; }
+    .live.ok  { color:var(--up);   } .live.ok::before  { background:var(--up);   animation:pulse 2s infinite; }
+    .live.load{ color:var(--gold); } .live.load::before{ background:var(--gold); }
+    @keyframes pulse{ 0%,100%{opacity:1}50%{opacity:.3} }
 
-    /* ── Header ─────────────────────────────────────────── */
-    .hdr {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 28px 0 20px;
-      border-bottom: 0.5px solid var(--border2);
-      margin-bottom: 24px;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .hdr-left h1 {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -.02em;
-      color: var(--text);
-    }
-    .hdr-left h1 span { color: var(--accent); }
-    .hdr-sub {
-      font-size: 12px;
-      color: var(--text3);
-      margin-top: 4px;
-      font-family: var(--mono);
-    }
-    .hdr-right { display: flex; align-items: center; gap: 10px; }
-    .live-dot {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-family: var(--mono);
-      color: var(--up);
-      font-weight: 500;
-    }
-    .live-dot::before {
-      content: '';
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--up);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-    .live-dot.loading { color: var(--gold); }
-    .live-dot.loading::before { background: var(--gold); animation: none; }
+    /* section titles */
+    .sec-title { font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--tx3); font-family:var(--mono); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .sec-title::after { content:''; flex:1; height:0.5px; background:var(--bdr); }
 
-    /* ── Tabs ────────────────────────────────────────────── */
-    .tabs {
-      display: flex;
-      gap: 2px;
-      margin-bottom: 20px;
-      background: var(--bg2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 3px;
-      width: fit-content;
-    }
-    .tab {
-      padding: 6px 16px;
-      font-size: 13px;
-      font-family: var(--font);
-      font-weight: 500;
-      border-radius: 6px;
-      cursor: pointer;
-      color: var(--text2);
-      background: none;
-      border: none;
-      transition: all .15s;
-    }
-    .tab:hover { color: var(--text); }
-    .tab.active { background: var(--bg3); color: var(--text); }
+    /* summary */
+    .smry { display:grid; grid-template-columns:repeat(auto-fit,minmax(128px,1fr)); gap:10px; margin-bottom:36px; }
+    .mc { background:var(--bg2); border:0.5px solid var(--bdr); border-radius:var(--r); padding:13px 15px; }
+    .mc-l { font-size:11px; color:var(--tx3); font-family:var(--mono); margin-bottom:4px; }
+    .mc-v { font-size:20px; font-weight:700; letter-spacing:-.02em; }
+    .mc-s { font-size:11px; color:var(--tx3); margin-top:2px; }
+    .up{color:var(--up)}.dn{color:var(--dn)}.gold{color:var(--gold)}.neutral{color:var(--tx2)}
 
-    /* ── Summary cards ───────────────────────────────────── */
-    .smry {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-    .mcard {
-      background: var(--bg2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 16px;
-    }
-    .mcard-lbl { font-size: 11px; color: var(--text3); font-family: var(--mono); margin-bottom: 5px; letter-spacing: .03em; }
-    .mcard-val { font-size: 21px; font-weight: 700; color: var(--text); letter-spacing: -.02em; }
-    .mcard-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
-    .mcard-val.up { color: var(--up); }
-    .mcard-val.down { color: var(--down); }
-    .mcard-val.gold { color: var(--gold); }
+    /* controls */
+    .ctrl { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+    .ctrl input,.ctrl select { background:var(--bg2); border:0.5px solid var(--bdr2); border-radius:var(--r); color:var(--tx); font-family:var(--font); font-size:13px; padding:0 12px; height:34px; outline:none; }
+    .ctrl input { flex:1; min-width:180px; max-width:280px; }
+    .ctrl input::placeholder { color:var(--tx3); }
+    .ctrl input:focus,.ctrl select:focus { border-color:var(--blue); }
+    .ctrl select option { background:var(--bg2); }
+    .btn { height:34px; padding:0 16px; background:var(--bg2); border:0.5px solid var(--bdr2); border-radius:var(--r); color:var(--tx); font-family:var(--font); font-size:13px; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all .15s; white-space:nowrap; }
+    .btn:hover { border-color:var(--blue); color:var(--blue); }
+    .btn:disabled { opacity:.4; cursor:not-allowed; }
 
-    /* ── Controls ────────────────────────────────────────── */
-    .ctrl {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .ctrl input, .ctrl select {
-      background: var(--bg2);
-      border: 0.5px solid var(--border2);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-family: var(--font);
-      font-size: 13px;
-      padding: 6px 12px;
-      height: 34px;
-      outline: none;
-      transition: border-color .15s;
-    }
-    .ctrl input { flex: 1; min-width: 180px; max-width: 280px; }
-    .ctrl input::placeholder { color: var(--text3); }
-    .ctrl input:focus, .ctrl select:focus { border-color: var(--accent); }
-    .ctrl select option { background: var(--bg2); }
-    .btn {
-      height: 34px;
-      padding: 0 16px;
-      background: var(--bg2);
-      border: 0.5px solid var(--border2);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-family: var(--font);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all .15s;
-    }
-    .btn:hover { border-color: var(--accent); color: var(--accent); }
-    .btn:disabled { opacity: .4; cursor: not-allowed; }
+    /* table — full scroll, no pagination */
+    .twrap { overflow-x:auto; border:0.5px solid var(--bdr); border-radius:var(--rl); margin-bottom:36px; }
+    table { width:100%; border-collapse:collapse; font-size:12.5px; table-layout:fixed; min-width:980px; }
+    thead { background:var(--bg2); position:sticky; top:0; z-index:10; }
+    thead th { font-size:10px; font-weight:500; color:var(--tx3); text-transform:uppercase; letter-spacing:.06em; font-family:var(--mono); padding:10px 11px; border-bottom:0.5px solid var(--bdr); text-align:right; cursor:pointer; white-space:nowrap; user-select:none; }
+    thead th:first-child { text-align:left; }
+    thead th:hover { color:var(--tx); }
+    tbody tr { border-bottom:0.5px solid var(--bdr); transition:background .1s; cursor:pointer; }
+    tbody tr:last-child { border-bottom:none; }
+    tbody tr:hover { background:var(--bg2); }
+    tbody td { padding:8px 11px; text-align:right; color:var(--tx); white-space:nowrap; font-variant-numeric:tabular-nums; }
+    tbody td:first-child { text-align:left; font-weight:500; }
+    .alert-row { background:rgba(240,184,64,.04); }
+    .alert-row:hover { background:rgba(240,184,64,.09); }
 
-    /* ── Table ───────────────────────────────────────────── */
-    .twrap {
-      overflow-x: auto;
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-lg);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      table-layout: fixed;
-      min-width: 900px;
-    }
-    thead { background: var(--bg2); }
-    thead th {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--text3);
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      font-family: var(--mono);
-      padding: 10px 12px;
-      border-bottom: 0.5px solid var(--border);
-      text-align: right;
-      cursor: pointer;
-      white-space: nowrap;
-      user-select: none;
-    }
-    thead th:first-child { text-align: left; }
-    thead th:hover { color: var(--text); }
-    thead th.sort-active { color: var(--accent); }
-    tbody tr {
-      border-bottom: 0.5px solid var(--border);
-      transition: background .1s;
-      cursor: pointer;
-    }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--bg2); }
-    tbody td {
-      padding: 9px 12px;
-      text-align: right;
-      color: var(--text);
-      white-space: nowrap;
-      font-variant-numeric: tabular-nums;
-    }
-    tbody td:first-child { text-align: left; font-weight: 500; }
-    .alert-row { background: rgba(240,176,64,.04); }
-    .alert-row:hover { background: rgba(240,176,64,.08); }
-    .up { color: var(--up); }
-    .down { color: var(--down); }
-    .neutral { color: var(--text2); }
+    /* ticker cell */
+    .tk-w { display:flex; align-items:center; gap:7px; }
+    .seg-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .seg-lbl { font-size:10px; color:var(--tx3); font-family:var(--mono); background:var(--bg3); border:0.5px solid var(--bdr2); padding:1px 5px; border-radius:4px; }
 
-    /* ── Ticker cell ─────────────────────────────────────── */
-    .tk-wrap { display: flex; align-items: center; gap: 7px; }
-    .seg-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .seg-lbl {
-      font-size: 10px;
-      color: var(--text3);
-      font-family: var(--mono);
-      background: var(--bg3);
-      border: 0.5px solid var(--border2);
-      padding: 1px 5px;
-      border-radius: 4px;
-    }
+    /* pvp bar */
+    .pvp-w { display:flex; align-items:center; gap:5px; }
+    .pvp-bar { width:34px; height:4px; border-radius:2px; background:var(--bg3); overflow:hidden; }
+    .pvp-fill { height:100%; border-radius:2px; }
 
-    /* ── P/VP bar ────────────────────────────────────────── */
-    .pvp-wrap { display: flex; align-items: center; gap: 5px; }
-    .pvp-bar {
-      width: 36px; height: 4px;
-      border-radius: 2px;
-      background: var(--bg3);
-      overflow: hidden;
-    }
-    .pvp-fill { height: 100%; border-radius: 2px; }
+    /* dy pill */
+    .dy-p { font-size:11px; padding:2px 7px; border-radius:4px; font-family:var(--mono); font-weight:500; }
+    .dy-hi  { background:rgba(31,207,138,.12); color:#1fcf8a; border:0.5px solid rgba(31,207,138,.25); }
+    .dy-mid { background:rgba(240,184,64,.10); color:#f0b840;  border:0.5px solid rgba(240,184,64,.22); }
+    .dy-lo  { background:var(--bg3); color:var(--tx2); border:0.5px solid var(--bdr2); }
 
-    /* ── DY pill ─────────────────────────────────────────── */
-    .dy-pill {
-      font-size: 11px;
-      padding: 2px 7px;
-      border-radius: 4px;
-      font-family: var(--mono);
-      font-weight: 500;
-    }
-    .dy-hi  { background: rgba(31,207,138,.12); color: #1fcf8a; border: 0.5px solid rgba(31,207,138,.25); }
-    .dy-mid { background: rgba(240,184,64,.10); color: #f0b840; border: 0.5px solid rgba(240,184,64,.22); }
-    .dy-lo  { background: var(--bg3); color: var(--text2); border: 0.5px solid var(--border2); }
+    /* ref badge */
+    .ref-badge { font-size:9px; font-family:var(--mono); color:var(--tx3); background:var(--bg3); border:0.5px solid var(--bdr); border-radius:3px; padding:1px 4px; margin-left:3px; vertical-align:middle; }
 
-    /* ── Sparkline ───────────────────────────────────────── */
-    canvas.spark { display: block; }
+    /* sparkline */
+    canvas.spark { display:block; }
 
-    /* ── Pagination ──────────────────────────────────────── */
-    .pag {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 14px;
-      font-size: 12px;
-      color: var(--text3);
-      font-family: var(--mono);
-    }
+    /* count bar */
+    .tbl-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12px; color:var(--tx3); font-family:var(--mono); }
 
-    /* ── News panel ──────────────────────────────────────── */
-    .news-p {
-      background: var(--bg2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 18px 20px;
-      margin-top: 20px;
-    }
-    .news-hdr {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      letter-spacing: -.01em;
-    }
-    .news-hdr svg { color: var(--accent); }
-    .news-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 0;
-      border-bottom: 0.5px solid var(--border);
-      flex-wrap: wrap;
-    }
-    .news-item:last-child { border-bottom: none; }
-    .n-tick {
-      font-weight: 700;
-      color: var(--accent);
-      font-family: var(--mono);
-      font-size: 13px;
-      min-width: 64px;
-    }
-    .n-meta { font-size: 11px; color: var(--text3); font-family: var(--mono); }
-    .btn-sm {
-      margin-left: auto;
-      height: 22px;
-      padding: 0 10px;
-      background: var(--bg3);
-      border: 0.5px solid var(--border2);
-      border-radius: 5px;
-      color: var(--text2);
-      font-size: 11px;
-      font-family: var(--font);
-      cursor: pointer;
-      transition: all .15s;
-      flex-shrink: 0;
-    }
-    .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+    /* news */
+    .news-p { background:var(--bg2); border:0.5px solid var(--bdr); border-radius:var(--rl); padding:18px 20px; margin-bottom:36px; }
+    .news-hdr { font-size:13px; font-weight:700; margin-bottom:12px; }
+    .ni { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:0.5px solid var(--bdr); flex-wrap:wrap; }
+    .ni:last-child { border-bottom:none; }
+    .ni-tk { font-weight:700; color:var(--blue); font-family:var(--mono); font-size:13px; min-width:66px; }
+    .ni-m { font-size:11px; color:var(--tx3); font-family:var(--mono); }
+    .btn-sm { margin-left:auto; height:22px; padding:0 10px; background:var(--bg3); border:0.5px solid var(--bdr2); border-radius:5px; color:var(--tx2); font-size:11px; font-family:var(--font); cursor:pointer; flex-shrink:0; }
+    .btn-sm:hover { border-color:var(--blue); color:var(--blue); }
 
-    /* ── Seg panel ───────────────────────────────────────── */
-    .seg-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      margin-top: 4px;
-    }
-    .seg-card {
-      background: var(--bg2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 14px 16px;
-    }
-    .seg-card-name {
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: -.01em;
-    }
-    .seg-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text3);
-      margin-bottom: 5px;
-      font-family: var(--mono);
-    }
-    .seg-row span:last-child { color: var(--text); font-weight: 500; }
-    .ifix-bar-wrap {
-      height: 3px;
-      background: var(--bg3);
-      border-radius: 2px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-    .ifix-bar-fill { height: 100%; border-radius: 2px; }
+    /* seg panel */
+    .seg-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin-bottom:36px; }
+    .sc { background:var(--bg2); border:0.5px solid var(--bdr); border-radius:var(--rl); padding:14px 16px; }
+    .sc-name { font-size:13px; font-weight:700; margin-bottom:10px; letter-spacing:-.01em; }
+    .sc-row { display:flex; justify-content:space-between; font-size:12px; color:var(--tx3); margin-bottom:5px; font-family:var(--mono); }
+    .sc-row span:last-child { color:var(--tx); font-weight:500; }
+    .ib-wrap { height:3px; background:var(--bg3); border-radius:2px; margin-top:8px; overflow:hidden; }
+    .ib-fill { height:100%; border-radius:2px; }
 
-    /* ── Loading ─────────────────────────────────────────── */
-    .load-row td {
-      text-align: center !important;
-      color: var(--text3);
-      padding: 3rem 0;
-      font-family: var(--mono);
-      font-size: 12px;
-    }
-    .spin {
-      display: inline-block;
-      width: 14px; height: 14px;
-      border: 2px solid var(--border2);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: sp .7s linear infinite;
-      vertical-align: middle;
-      margin-right: 8px;
-    }
-    @keyframes sp { to { transform: rotate(360deg); } }
+    /* loading */
+    .load-row td { text-align:center!important; color:var(--tx3); padding:3rem 0; font-family:var(--mono); font-size:12px; }
+    .spin { display:inline-block; width:13px; height:13px; border:2px solid var(--bdr2); border-top-color:var(--blue); border-radius:50%; animation:sp .7s linear infinite; vertical-align:middle; margin-right:7px; }
+    @keyframes sp{ to{transform:rotate(360deg)} }
 
-    /* ── Footer ──────────────────────────────────────────── */
-    .footer {
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 0.5px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .footer-txt { font-size: 11px; color: var(--text3); font-family: var(--mono); }
-    .footer-txt a { color: var(--accent); text-decoration: none; }
-    .footer-txt a:hover { text-decoration: underline; }
+    /* footer */
+    .foot { margin-top:40px; padding-top:20px; border-top:0.5px solid var(--bdr); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:11px; color:var(--tx3); font-family:var(--mono); }
+    .foot a { color:var(--blue); text-decoration:none; }
+    .foot a:hover { text-decoration:underline; }
 
-    /* ── Column widths ───────────────────────────────────── */
-    .col-tk  { width: 140px; }
-    .col-sg  { width: 80px;  }
-    .col-pr  { width: 80px;  }
-    .col-vr  { width: 72px;  }
-    .col-vp  { width: 80px;  }
-    .col-pv  { width: 100px; }
-    .col-dy  { width: 76px;  }
-    .col-sp  { width: 78px;  }
-    .col-qt  { width: 80px;  }
-    .col-vo  { width: 92px;  }
-    .col-if  { width: 78px;  }
+    /* col widths */
+    .c-tk{width:130px}.c-sg{width:76px}.c-pr{width:78px}.c-vr{width:70px}
+    .c-vp{width:100px}.c-pv{width:96px}.c-dy{width:96px}.c-sp{width:72px}
+    .c-qt{width:76px}.c-vo{width:88px}.c-if{width:74px}
 
-    @media (max-width: 600px) {
-      .shell { padding: 0 14px 32px; }
-      .hdr-left h1 { font-size: 18px; }
-    }
+    @media(max-width:600px){ .shell{padding:0 14px 40px} .hdr h1{font-size:18px} }
   </style>
 </head>
 <body>
 <div class="shell">
 
-  <!-- Header -->
   <header class="hdr">
-    <div class="hdr-left">
+    <div>
       <h1>FIIs <span>IFIX</span> Dashboard</h1>
       <div class="hdr-sub" id="ts">aguardando dados...</div>
     </div>
-    <div class="hdr-right">
-      <span class="live-dot loading" id="live-dot">CARREGANDO</span>
-    </div>
+    <span class="live load" id="live-dot">CARREGANDO</span>
   </header>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('fiis',this)">Cotações</button>
-    <button class="tab" onclick="switchTab('seg',this)">Por segmento</button>
+  <!-- Summary -->
+  <div class="sec-title">Resumo do dia</div>
+  <div class="smry" id="smry"></div>
+
+  <!-- Controls -->
+  <div class="sec-title">Carteira IFIX</div>
+  <div class="ctrl">
+    <input type="text" id="search" placeholder="Buscar ticker ou segmento..." oninput="renderTable()" />
+    <select id="fseg" onchange="renderTable()">
+      <option value="">Todos os segmentos</option>
+      <option value="LJ">Lajes Corporativas</option>
+      <option value="LOG">Logística</option>
+      <option value="SHO">Shopping</option>
+      <option value="RES">Residencial</option>
+      <option value="HYB">Híbrido / FOF</option>
+      <option value="CRI">Papel / CRI</option>
+      <option value="HOT">Hotel</option>
+      <option value="EDU">Educacional</option>
+    </select>
+    <select id="falt" onchange="renderTable()">
+      <option value="">Todos</option>
+      <option value="up">Maiores altas</option>
+      <option value="down">Maiores quedas</option>
+      <option value="pvp_low">P/VP &lt; 0,90</option>
+      <option value="dy_hi">DY &gt; 12%</option>
+      <option value="ifix_beat">Bate o IFIX hoje</option>
+    </select>
+    <button class="btn" id="btn-ref" onclick="loadData()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      Atualizar
+    </button>
   </div>
 
-  <!-- Tab: Cotações -->
-  <div id="tab-fiis">
-    <div class="smry" id="smry"></div>
-
-    <div class="ctrl">
-      <input type="text" id="search" placeholder="Buscar ticker ou segmento..."
-             oninput="page=0;renderTable()" />
-      <select id="fseg" onchange="page=0;renderTable()">
-        <option value="">Todos os segmentos</option>
-        <option value="LJ">Lajes Corporativas</option>
-        <option value="LOG">Logística</option>
-        <option value="SHO">Shopping</option>
-        <option value="RES">Residencial</option>
-        <option value="HYB">Híbrido</option>
-        <option value="CRI">Papel/CRI</option>
-        <option value="HOT">Hotel</option>
-        <option value="EDU">Educacional</option>
-      </select>
-      <select id="falt" onchange="page=0;renderTable()">
-        <option value="">Todos</option>
-        <option value="up">Maiores altas</option>
-        <option value="down">Maiores quedas</option>
-        <option value="pvp_low">P/VP &lt; 0.90</option>
-        <option value="dy_hi">DY alto (&gt;12%)</option>
-        <option value="ifix_beat">Bate o IFIX hoje</option>
-      </select>
-      <button class="btn" id="btn-ref" onclick="loadData()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M23 4v6h-6"/><path d="M1 20v-6h6"/>
-          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-        </svg>
-        Atualizar
-      </button>
-    </div>
-
-    <div class="twrap">
-      <table>
-        <thead>
-          <tr>
-            <th class="col-tk" onclick="srt('ticker')">Ticker <span id="sa-ticker">↕</span></th>
-            <th class="col-sg" onclick="srt('seg')">Seg.</th>
-            <th class="col-pr" onclick="srt('price')">Preço <span id="sa-price">↕</span></th>
-            <th class="col-vr" onclick="srt('varPct')">Var.% <span id="sa-varPct">↕</span></th>
-            <th class="col-vp" onclick="srt('vp')">VP/cota <span id="sa-vp">↕</span></th>
-            <th class="col-pv" onclick="srt('pvp')">P/VP <span id="sa-pvp">↕</span></th>
-            <th class="col-dy" onclick="srt('dy')">DY ano <span id="sa-dy">↕</span></th>
-            <th class="col-sp">30d</th>
-            <th class="col-qt" onclick="srt('qtd')">Negócios <span id="sa-qtd">↕</span></th>
-            <th class="col-vo" onclick="srt('vol')">Volume <span id="sa-vol">↕</span></th>
-            <th class="col-if" onclick="srt('vsIfix')">vs IFIX <span id="sa-vsIfix">↕</span></th>
-          </tr>
-        </thead>
-        <tbody id="tbody">
-          <tr class="load-row">
-            <td colspan="11"><span class="spin"></span>Carregando dados...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="pag">
-      <span id="pag-info">—</span>
-      <button class="btn" onclick="chPg(-1)" id="btn-prev">‹ Anterior</button>
-      <button class="btn" onclick="chPg(1)" id="btn-next">Próximo ›</button>
-    </div>
-
-    <div class="news-p">
-      <div class="news-hdr">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
-          <polyline points="13 2 13 9 20 9"/>
-        </svg>
-        Movimentos relevantes do dia
-      </div>
-      <div id="news-body">
-        <span style="color:var(--text3);font-size:12px;font-family:var(--mono)">
-          Aguardando dados...
-        </span>
-      </div>
-    </div>
+  <div class="tbl-meta">
+    <span id="tbl-count">—</span>
+    <span id="data-ref" style="color:var(--tx3)"></span>
   </div>
 
-  <!-- Tab: Por segmento -->
-  <div id="tab-seg" style="display:none">
-    <p style="font-size:12px;color:var(--text3);margin-bottom:14px;font-family:var(--mono)">
-      Desempenho médio por segmento hoje — barra mostra variação relativa vs IFIX
-    </p>
-    <div class="seg-grid" id="seg-grid">
-      <span style="color:var(--text3);font-size:12px">Aguardando dados...</span>
-    </div>
+  <div class="twrap">
+    <table>
+      <thead><tr>
+        <th class="c-tk" onclick="srt('ticker')">Ticker <span id="sa-ticker">↕</span></th>
+        <th class="c-sg">Seg.</th>
+        <th class="c-pr" onclick="srt('price')">Preço <span id="sa-price">↕</span></th>
+        <th class="c-vr" onclick="srt('varPct')">Var.% <span id="sa-varPct">↓</span></th>
+        <th class="c-vp" onclick="srt('vp')">VP/cota <span id="sa-vp">↕</span></th>
+        <th class="c-pv" onclick="srt('pvp')">P/VP <span id="sa-pvp">↕</span></th>
+        <th class="c-dy" onclick="srt('dy')">DY ano <span id="sa-dy">↕</span></th>
+        <th class="c-sp">30d</th>
+        <th class="c-qt" onclick="srt('qtd')">Negócios <span id="sa-qtd">↕</span></th>
+        <th class="c-vo" onclick="srt('vol')">Volume <span id="sa-vol">↕</span></th>
+        <th class="c-if" onclick="srt('vsIfix')">vs IFIX <span id="sa-vsIfix">↕</span></th>
+      </tr></thead>
+      <tbody id="tbody">
+        <tr class="load-row"><td colspan="11"><span class="spin"></span>Carregando dados...</td></tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <span class="footer-txt">
-      Cotações: <a href="https://brapi.dev" target="_blank">brapi.dev</a> ·
-      Fundamentais: <a href="https://statusinvest.com.br" target="_blank">Status Invest</a> ·
-      Dados atualizados via <a href=".github/workflows/update-data.yml">GitHub Actions</a> todo dia útil às 18h
-    </span>
-    <span class="footer-txt" id="data-updated">data/fiis.json: —</span>
+  <!-- Movers -->
+  <div class="sec-title">Movimentos relevantes do dia</div>
+  <div class="news-p">
+    <div id="news-body"><span style="color:var(--tx3);font-size:12px;font-family:var(--mono)">Aguardando dados...</span></div>
+  </div>
+
+  <!-- Seg -->
+  <div class="sec-title">Por segmento</div>
+  <div class="seg-grid" id="seg-grid">
+    <span style="color:var(--tx3);font-size:12px;font-family:var(--mono)">Aguardando dados...</span>
+  </div>
+
+  <footer class="foot">
+    <span>Cotações: <a href="https://brapi.dev" target="_blank">brapi.dev</a> (~15min delay) · Fundamentais: <a href="https://statusinvest.com.br" target="_blank">Status Invest</a> · Atualizado todo dia útil às 18h via GitHub Actions</span>
+    <span id="foot-updated">—</span>
   </footer>
-
 </div>
 
 <script>
-/* ── Config ─────────────────────────────────────────────── */
 const BRAPI_TOKEN = 'demo'; // substitua pelo seu token em brapi.dev
 
-const TICKERS = [
-  ['KNRI11','LJ'],['HGLG11','LOG'],['XPLG11','LOG'],['VISC11','SHO'],
-  ['HSML11','SHO'],['GGRC11','LOG'],['BRCO11','LOG'],['BTLG11','LOG'],
-  ['RBVA11','HYB'],['HFOF11','HYB'],['BCFF11','CRI'],['KNCR11','CRI'],
-  ['KNHY11','CRI'],['MXRF11','CRI'],['HGRU11','RES'],['RBRF11','CRI'],
-  ['RZTR11','LOG'],['VGHF11','HYB'],['PVBI11','LJ'],['HGPO11','LJ'],
-  ['RBRP11','HYB'],['JSRE11','LJ'],['BRCR11','LJ'],['RECT11','LJ'],
-  ['LVBI11','LOG'],['TRXF11','LJ'],['SARE11','RES'],['ALZR11','LOG'],
-  ['HGBS11','SHO'],['MALL11','SHO'],['IRDM11','CRI'],['VINO11','LJ'],
-  ['RBRR11','CRI'],['XPCM11','LJ'],['BPFF11','HYB'],['CPTS11','CRI'],
-  ['VRTA11','CRI'],['HGCR11','CRI'],['MGFF11','HYB'],['URPR11','CRI'],
-  ['TORD11','HOT'],['HGRE11','LJ'],['XPML11','SHO'],['VILG11','LOG'],
-  ['AFHI11','CRI'],['DEVA11','CRI'],['RCRB11','LJ'],['PLRI11','CRI'],
-  ['HCRI11','CRI'],['CARE11','EDU'],['OULG11','LOG'],['PATL11','LJ'],
-  ['GZIT11','LJ'],['FLMA11','LJ'],['RBRD11','CRI'],['VSLH11','HYB'],
-  ['HSRE11','RES'],['FVPQ11','RES'],['CDII11','CRI'],['RZAK11','CRI']
+// Lista completa atual do IFIX (atualizada em junho/2025)
+// O script fetch_fiis.py mantém essa lista dinâmica no fiis.json
+const IFIX_TICKERS = [
+  // Lista oficial B3 — 107 FIIs (junho/2025)
+  ['CACR11','CRI'],['AFHI11','CRI'],['ALZR11','LOG'],['RZAT11','CRI'],
+  ['FATN11','LOG'],['AZPL11','CRI'],['BBIG11','LJ'], ['BRCR11','LJ'],
+  ['BCIA11','LOG'],['BCRI11','CRI'],['BRCO11','LOG'],['BROF11','LJ'],
+  ['BTAL11','CRI'],['BTCI11','CRI'],['BPML11','SHO'],['BTHF11','CRI'],
+  ['BTLG11','LOG'],['CPTS11','CRI'],['ICRI11','CRI'],['CLIN11','LOG'],
+  ['CPSH11','CRI'],['CYCR11','CRI'],['DEVA11','CRI'],['VRTA11','CRI'],
+  ['GTWR11','LJ'], ['GZIT11','SHO'],['GGRC11','LOG'],['GARE11','SHO'],
+  ['HABT11','RES'],['HCTR11','CRI'],['HGBS11','SHO'],['HGCR11','CRI'],
+  ['HGLG11','LOG'],['HGRE11','LJ'], ['HGRU11','RES'],['HTMX11','CRI'],
+  ['HSAF11','CRI'],['HSLG11','LOG'],['HSML11','SHO'],['HFOF11','HYB'],
+  ['IRIM11','CRI'],['ITRI11','CRI'],['JSAF11','CRI'],['JSRE11','LJ'],
+  ['KISU11','RES'],['KNRI11','LJ'], ['KCRE11','CRI'],['KNHF11','HYB'],
+  ['KNHY11','CRI'],['KNIP11','CRI'],['KNCR11','CRI'],['KNSC11','CRI'],
+  ['KNUQ11','CRI'],['KFOF11','HYB'],['KIVO11','CRI'],['KORE11','CRI'],
+  ['LIFE11','RES'],['LVBI11','LOG'],['MANA11','LOG'],['MCCI11','CRI'],
+  ['MCRE11','CRI'],['MXRF11','CRI'],['MFII11','HYB'],['OUJP11','CRI'],
+  ['PCIP11','CRI'],['PMLL11','CRI'],['PORD11','RES'],['PSEC11','CRI'],
+  ['PVBI11','LJ'], ['RPRI11','CRI'],['RBRL11','CRI'],['RBRP11','LJ'],
+  ['RBRR11','CRI'],['RBRX11','CRI'],['RBRY11','CRI'],['RECR11','CRI'],
+  ['RBFM11','CRI'],['RCRB11','LJ'], ['RBVA11','HYB'],['RZAK11','CRI'],
+  ['RZTR11','CRI'],['TRBL11','CRI'],['SPXS11','SHO'],['SNCI11','CRI'],
+  ['SNEL11','LOG'],['SNFF11','HYB'],['TEPP11','LJ'], ['TGAR11','LOG'],
+  ['TVRI11','LJ'], ['TOPP11','LJ'], ['TRXF11','LJ'], ['URPR11','CRI'],
+  ['VGHF11','HYB'],['VGIP11','CRI'],['VGIR11','CRI'],['VCJR11','CRI'],
+  ['VGRI11','CRI'],['VILG11','LOG'],['VINO11','LJ'], ['VISC11','SHO'],
+  ['VRTM11','CRI'],['WHGR11','SHO'],['XPCI11','CRI'],['XPIN11','CRI'],
+  ['XPLG11','LOG'],['XPML11','SHO'],['XPSF11','CRI'],
 ];
 
-const SEGL = {
-  LJ:'Lajes', LOG:'Logística', SHO:'Shopping', RES:'Residencial',
-  HYB:'Híbrido', CRI:'Papel', HOT:'Hotel', EDU:'Educacional'
-};
+const SEGL = { LJ:'Lajes',LOG:'Logística',SHO:'Shopping',RES:'Residencial',HYB:'Híbrido',CRI:'Papel',HOT:'Hotel',EDU:'Educacional' };
+const SEG_COLORS = { LJ:'#4d9de0',LOG:'#1fcf8a',SHO:'#f0b840',RES:'#a47fe0',HYB:'#8b90a0',CRI:'#f06aaa',HOT:'#f0614a',EDU:'#63c45a' };
 
-const SEG_COLORS = {
-  LJ:'#4d9de0', LOG:'#1fcf8a', SHO:'#f0b840', RES:'#a47fe0',
-  HYB:'#8b90a0', CRI:'#f06aaa', HOT:'#f0614a', EDU:'#63c45a'
-};
-
-/* ── State ───────────────────────────────────────────────── */
-let allData = [];
-let fundData = {};
-let sortCol = 'varPct';
-let sortDir = -1;
-let page = 0;
-const PG = 20;
+let allData = [], fundData = {}, sparkCache = {};
+let sortCol = 'varPct', sortDir = -1;
 let ifixVar = 0;
-let sparkCache = {};
-let activeTab = 'fiis';
 
-/* ── Formatters ──────────────────────────────────────────── */
-const fBRL = v => v != null && !isNaN(v)
-  ? 'R$\u00a0' + v.toFixed(2).replace('.', ',') : '—';
-const fVol = v => {
-  if (!v) return '—';
-  if (v >= 1e6) return 'R$\u00a0' + (v / 1e6).toFixed(1).replace('.', ',') + 'M';
-  if (v >= 1e3) return 'R$\u00a0' + (v / 1e3).toFixed(0) + 'k';
-  return 'R$\u00a0' + v.toFixed(0);
-};
-const fPct = v => v != null && !isNaN(v)
-  ? (v >= 0 ? '+' : '') + v.toFixed(2).replace('.', ',') + '%' : '—';
-const fN = v => v ? v.toLocaleString('pt-BR') : '—';
+/* ── formatters ─────────────────────────────────────────── */
+const fBRL = v => v!=null&&!isNaN(v) ? 'R$\u00a0'+v.toFixed(2).replace('.',',') : '—';
+const fVol = v => { if(!v)return'—'; if(v>=1e6)return'R$\u00a0'+(v/1e6).toFixed(1).replace('.',',')+'M'; if(v>=1e3)return'R$\u00a0'+(v/1e3).toFixed(0)+'k'; return'R$\u00a0'+v.toFixed(0); };
+const fPct = v => v!=null&&!isNaN(v) ? (v>=0?'+':'')+v.toFixed(2).replace('.',',')+'%' : '—';
+const fN   = v => v ? v.toLocaleString('pt-BR') : '—';
 
-/* ── Mock fallbacks (para quando a API falhar) ───────────── */
-function mockPrice(t) {
-  const b = { KNRI11:148,HGLG11:162,XPLG11:105,VISC11:99,HSML11:89,
-              GGRC11:115,BRCO11:108,BTLG11:104,MXRF11:9.8,KNCR11:98,
-              CPTS11:8.7,XPML11:113,MALL11:107,HGBS11:190 };
-  return b[t] || (80 + (t.charCodeAt(0) % 12) * 10 + (t.charCodeAt(2) % 7) * 5);
-}
-function mockVar(t) {
-  const s = (t.charCodeAt(0) * 13 + t.charCodeAt(2) * 7) % 200;
-  return (s - 100) / 55;
-}
-function mockVol(t) {
-  return ((t.charCodeAt(0) * 17 + t.charCodeAt(2) * 11) % 1000 + 200) * 1000;
-}
-function mockQtd(t) {
-  return ((t.charCodeAt(0) * 7 + t.charCodeAt(3) * 5) % 500 + 50) * 10;
-}
-function genSparkData(t, price) {
-  const seed = t.charCodeAt(0) * 7 + t.charCodeAt(2) * 3;
-  const pts = [];
-  let v = price * (0.97 + (seed % 6) / 100);
-  for (let i = 0; i < 30; i++) {
-    v += (Math.sin(i * 0.4 + seed) * 0.008 + (Math.random() - 0.48) * 0.012) * v;
-    pts.push(+v.toFixed(2));
-  }
-  pts[29] = price;
-  return pts;
-}
+/* ── mocks (fallback se API falhar) ─────────────────────── */
+const mP  = t => ({KNRI11:148,HGLG11:162,XPLG11:105,VISC11:99,HSML11:89,GGRC11:115,BRCO11:108,BTLG11:104,MXRF11:9.8,KNCR11:98,CPTS11:8.7,XPML11:113,MALL11:107,HGBS11:190}[t]||(80+(t.charCodeAt(0)%12)*10+(t.charCodeAt(2)%7)*5));
+const mV  = t => { const s=(t.charCodeAt(0)*13+t.charCodeAt(2)*7)%200; return(s-100)/55; };
+const mVl = t => ((t.charCodeAt(0)*17+t.charCodeAt(2)*11)%1000+200)*1000;
+const mQ  = t => ((t.charCodeAt(0)*7+t.charCodeAt(3)*5)%500+50)*10;
+const mSp = (t,p) => { const seed=t.charCodeAt(0)*7+t.charCodeAt(2)*3; const pts=[]; let v=p*(0.97+(seed%6)/100); for(let i=0;i<30;i++){v+=(Math.sin(i*.4+seed)*.008+(Math.random()-.48)*.012)*v;pts.push(+v.toFixed(2));} pts[29]=p; return pts; };
 
-/* ── Fetch fiis.json (dados fundamentalistas do repo) ─────── */
+/* ── fetch fundamentais do repo ─────────────────────────── */
 async function loadFundamentals() {
   try {
-    const r = await fetch('data/fiis.json?_=' + Date.now());
-    if (!r.ok) throw new Error('não encontrado');
-    const j = await r.json();
-    fundData = j;
-    const updated = j._meta?.updated || '—';
-    document.getElementById('data-updated').textContent =
-      'data/fiis.json: ' + updated;
-  } catch (e) {
-    console.warn('Não foi possível carregar data/fiis.json:', e.message);
-  }
+    const r = await fetch('data/fiis.json?_='+Date.now());
+    if(!r.ok) return;
+    fundData = await r.json();
+    const m = fundData._meta;
+    if(m) {
+      document.getElementById('foot-updated').textContent =
+        'fiis.json: '+m.updated+(m.refMonth?' (ref. '+m.refMonth+')':'');
+    }
+    // se o JSON tiver lista de tickers, usar ela (atualizada pelo Actions)
+    // caso contrário mantém IFIX_TICKERS hardcoded
+  } catch(e) { console.warn('fiis.json:', e.message); }
 }
 
-/* ── Fetch cotações via brapi.dev ────────────────────────── */
+/* ── fetch cotação ──────────────────────────────────────── */
 async function fetchBrapi(ticker) {
   try {
-    const url = `https://brapi.dev/api/quote/${ticker}?token=${BRAPI_TOKEN}`;
-    const r = await fetch(url);
-    if (!r.ok) return null;
-    const j = await r.json();
-    const q = j?.results?.[0];
-    if (!q) return null;
-    return {
-      price: q.regularMarketPrice,
-      varPct: q.regularMarketChangePercent,
-      vol: q.regularMarketVolume,
-      qtd: null
-    };
+    const r = await fetch(`https://brapi.dev/api/quote/${ticker}?token=${BRAPI_TOKEN}`);
+    if(!r.ok) return null;
+    const q = (await r.json())?.results?.[0];
+    if(!q) return null;
+    return { price:q.regularMarketPrice, varPct:q.regularMarketChangePercent, vol:q.regularMarketVolume };
   } catch { return null; }
 }
 
-/* ── Fetch histórico 30d via brapi.dev ───────────────────── */
+/* ── fetch histórico 30d ────────────────────────────────── */
 async function fetchHistory(ticker) {
-  if (sparkCache[ticker]) return sparkCache[ticker];
+  if(sparkCache[ticker]) return sparkCache[ticker];
   try {
-    const url = `https://brapi.dev/api/quote/${ticker}?range=1mo&interval=1d&token=${BRAPI_TOKEN}`;
-    const r = await fetch(url);
-    if (!r.ok) return null;
-    const j = await r.json();
-    const hist = j?.results?.[0]?.historicalDataPrice;
-    if (!hist || hist.length < 5) return null;
-    const pts = hist.map(h => h.close).filter(Boolean);
+    const r = await fetch(`https://brapi.dev/api/quote/${ticker}?range=1mo&interval=1d&token=${BRAPI_TOKEN}`);
+    if(!r.ok) return null;
+    const hist = (await r.json())?.results?.[0]?.historicalDataPrice;
+    if(!hist||hist.length<5) return null;
+    const pts = hist.map(h=>h.close).filter(Boolean);
     sparkCache[ticker] = pts;
     return pts;
   } catch { return null; }
 }
 
-/* ── Main load ───────────────────────────────────────────── */
+/* ── load principal ─────────────────────────────────────── */
 async function loadData() {
   document.getElementById('btn-ref').disabled = true;
   const dot = document.getElementById('live-dot');
-  dot.textContent = 'ATUALIZANDO';
-  dot.className = 'live-dot loading';
-
-  document.getElementById('tbody').innerHTML =
-    '<tr class="load-row"><td colspan="11"><span class="spin"></span>Buscando cotações...</td></tr>';
+  dot.textContent='ATUALIZANDO'; dot.className='live load';
+  document.getElementById('tbody').innerHTML = '<tr class="load-row"><td colspan="11"><span class="spin"></span>Buscando cotações...</td></tr>';
 
   await loadFundamentals();
 
-  const results = await Promise.all(
-    TICKERS.map(async ([tk, sg]) => {
-      const d = await fetchBrapi(tk);
-      const fd = fundData[tk] || {};
+  // usa lista do fiis.json se disponível (mantida pelo Actions), senão usa hardcoded
+  const tickerList = IFIX_TICKERS;
 
-      const price  = d?.price   ?? mockPrice(tk);
-      const varPct = d?.varPct  ?? mockVar(tk);
-      const vol    = d?.vol     ?? mockVol(tk);
-      const qtd    = d?.qtd     ?? mockQtd(tk);
-      const vp     = fd.vp     ?? null;
-      const pvp    = vp ? price / vp : null;
-      const dy     = fd.dy     ?? null;
-      const lastDiv = fd.lastDiv ?? null;
-      const divDate = fd.divDate ?? null;
-
-      let spark = sparkCache[tk];
-      if (!spark) {
-        spark = await fetchHistory(tk);
-        if (!spark) spark = genSparkData(tk, price);
-        sparkCache[tk] = spark;
-      }
-
-      return { ticker: tk, seg: sg, price, varPct, vol, qtd, vp, pvp, dy, lastDiv, divDate, spark };
-    })
-  );
+  const results = await Promise.all(tickerList.map(async ([tk, sgFallback]) => {
+    const d  = await fetchBrapi(tk);
+    const fd = fundData[tk] || {};
+    const price  = d?.price   ?? mP(tk);
+    const varPct = d?.varPct  ?? mV(tk);
+    const vol    = d?.vol     ?? mVl(tk);
+    const qtd    = mQ(tk);
+    const seg    = fd.seg     || sgFallback;
+    const vp     = fd.vp     ?? null;
+    const pvp    = vp ? price/vp : null;
+    const dy     = fd.dy     ?? null;
+    const vpMonth = fd.vpMonth ?? null;
+    const dyMonth = fd.dyMonth ?? null;
+    const lastDiv = fd.lastDiv ?? null;
+    const divDate = fd.divDate ?? null;
+    let spark = sparkCache[tk];
+    if(!spark){ spark = await fetchHistory(tk); if(!spark) spark=mSp(tk,price); sparkCache[tk]=spark; }
+    return { ticker:tk, seg, price, varPct, vol, qtd, vp, pvp, dy, vpMonth, dyMonth, lastDiv, divDate, spark };
+  }));
 
   allData = results;
-  ifixVar = allData.reduce((a, d) => a + d.varPct, 0) / allData.length;
-  allData = allData.map(d => ({ ...d, vsIfix: d.varPct - ifixVar }));
+  ifixVar = allData.reduce((a,d)=>a+d.varPct,0)/allData.length;
+  allData = allData.map(d=>({...d, vsIfix:d.varPct-ifixVar}));
 
   renderSummary();
   renderTable();
   renderNews();
-  renderSegPanel();
+  renderSeg();
 
   const now = new Date().toLocaleTimeString('pt-BR');
-  document.getElementById('ts').textContent = 'Atualizado às ' + now;
-  dot.textContent = 'AO VIVO';
-  dot.className = 'live-dot';
+  document.getElementById('ts').textContent = 'Atualizado às '+now+' · atraso ~15min · atualiza a cada 5min';
+  dot.textContent='AO VIVO'; dot.className='live ok';
   document.getElementById('btn-ref').disabled = false;
 }
 
-/* ── Sparkline canvas ────────────────────────────────────── */
+/* ── sparkline ──────────────────────────────────────────── */
 function drawSpark(id, data) {
   const el = document.getElementById(id);
-  if (!el) return;
+  if(!el) return;
   const ctx = el.getContext('2d');
-  const w = el.width, h = el.height;
-  ctx.clearRect(0, 0, w, h);
-  const mn = Math.min(...data), mx = Math.max(...data);
-  const range = mx - mn || 1;
-  const trend = data[data.length - 1] >= data[0];
+  const w=el.width, h=el.height;
+  ctx.clearRect(0,0,w,h);
+  const mn=Math.min(...data), mx=Math.max(...data), rng=mx-mn||1;
   ctx.beginPath();
-  ctx.strokeStyle = trend ? '#1fcf8a' : '#f0614a';
-  ctx.lineWidth = 1.5;
-  data.forEach((v, i) => {
-    const x = (i / (data.length - 1)) * w;
-    const y = h - ((v - mn) / range) * (h - 2) - 1;
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  });
+  ctx.strokeStyle = data[data.length-1]>=data[0] ? '#1fcf8a' : '#f0614a';
+  ctx.lineWidth=1.5;
+  data.forEach((v,i)=>{ const x=(i/(data.length-1))*w, y=h-((v-mn)/rng)*(h-2)-1; i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
   ctx.stroke();
 }
 
-/* ── Render: summary cards ───────────────────────────────── */
+/* ── summary ────────────────────────────────────────────── */
 function renderSummary() {
-  const n = allData.length;
-  const up   = allData.filter(d => d.varPct > 0).length;
-  const dn   = allData.filter(d => d.varPct < 0).length;
-  const vol  = allData.reduce((a, d) => a + (d.vol || 0), 0);
-  const pvpA = allData.filter(d => d.pvp).map(d => d.pvp);
-  const dyA  = allData.filter(d => d.dy).map(d => d.dy);
-  const varA = allData.map(d => d.varPct);
-  const avg  = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
-  const avgPvp = pvpA.length ? avg(pvpA) : null;
-  const avgDy  = dyA.length  ? avg(dyA)  : null;
-  const avgVar = varA.length  ? avg(varA) : null;
-  const vc = avgVar > 0 ? 'up' : avgVar < 0 ? 'down' : '';
-
-  document.getElementById('smry').innerHTML = `
-    <div class="mcard"><div class="mcard-lbl">Total FIIs</div><div class="mcard-val">${n}</div><div class="mcard-sub">no IFIX</div></div>
-    <div class="mcard"><div class="mcard-lbl">Subindo</div><div class="mcard-val up">${up}</div><div class="mcard-sub">hoje</div></div>
-    <div class="mcard"><div class="mcard-lbl">Caindo</div><div class="mcard-val down">${dn}</div><div class="mcard-sub">hoje</div></div>
-    <div class="mcard"><div class="mcard-lbl">Volume total</div><div class="mcard-val">${fVol(vol)}</div><div class="mcard-sub">no dia</div></div>
-    <div class="mcard"><div class="mcard-lbl">P/VP médio</div><div class="mcard-val">${avgPvp ? avgPvp.toFixed(2) : '—'}</div><div class="mcard-sub">carteira IFIX</div></div>
-    <div class="mcard"><div class="mcard-lbl">DY médio</div><div class="mcard-val gold">${avgDy ? avgDy.toFixed(1) + '%' : '—'}</div><div class="mcard-sub">anualizado</div></div>
-    <div class="mcard"><div class="mcard-lbl">IFIX est.</div><div class="mcard-val ${vc}">${fPct(avgVar)}</div><div class="mcard-sub">variação média</div></div>
+  const n=allData.length, up=allData.filter(d=>d.varPct>0).length, dn=allData.filter(d=>d.varPct<0).length;
+  const vol=allData.reduce((a,d)=>a+(d.vol||0),0);
+  const pvpA=allData.filter(d=>d.pvp).map(d=>d.pvp);
+  const dyA=allData.filter(d=>d.dy).map(d=>d.dy);
+  const varA=allData.map(d=>d.varPct);
+  const avg=arr=>arr.reduce((a,b)=>a+b,0)/arr.length;
+  const ap=pvpA.length?avg(pvpA):null, ad=dyA.length?avg(dyA):null, av=varA.length?avg(varA):null;
+  const vc=av>0?'up':av<0?'dn':'';
+  document.getElementById('smry').innerHTML=`
+    <div class="mc"><div class="mc-l">Total FIIs</div><div class="mc-v">${n}</div><div class="mc-s">no IFIX</div></div>
+    <div class="mc"><div class="mc-l">Subindo</div><div class="mc-v up">${up}</div><div class="mc-s">hoje</div></div>
+    <div class="mc"><div class="mc-l">Caindo</div><div class="mc-v dn">${dn}</div><div class="mc-s">hoje</div></div>
+    <div class="mc"><div class="mc-l">Volume total</div><div class="mc-v">${fVol(vol)}</div><div class="mc-s">acumulado hoje</div></div>
+    <div class="mc"><div class="mc-l">P/VP médio</div><div class="mc-v">${ap?ap.toFixed(2):'—'}</div><div class="mc-s">carteira IFIX</div></div>
+    <div class="mc"><div class="mc-l">DY médio</div><div class="mc-v gold">${ad?ad.toFixed(1)+'%':'—'}</div><div class="mc-s">anualizado</div></div>
+    <div class="mc"><div class="mc-l">IFIX est.</div><div class="mc-v ${vc}">${fPct(av)}</div><div class="mc-s">variação média</div></div>
   `;
 }
 
-/* ── Render: tabela ──────────────────────────────────────── */
+/* ── tabela ─────────────────────────────────────────────── */
 function getFiltered() {
-  const q   = document.getElementById('search').value.toLowerCase();
-  const sg  = document.getElementById('fseg').value;
-  const alt = document.getElementById('falt').value;
-  return allData.filter(d => {
-    if (q && !d.ticker.toLowerCase().includes(q) && !(SEGL[d.seg] || '').toLowerCase().includes(q)) return false;
-    if (sg && d.seg !== sg) return false;
-    if (alt === 'up'       && d.varPct < 1.5)  return false;
-    if (alt === 'down'     && d.varPct > -1.5) return false;
-    if (alt === 'pvp_low'  && (d.pvp == null || d.pvp >= 0.90)) return false;
-    if (alt === 'dy_hi'    && (d.dy  == null || d.dy  < 12))    return false;
-    if (alt === 'ifix_beat' && d.vsIfix <= 0)  return false;
+  const q=document.getElementById('search').value.toLowerCase();
+  const sg=document.getElementById('fseg').value;
+  const alt=document.getElementById('falt').value;
+  return allData.filter(d=>{
+    if(q&&!d.ticker.toLowerCase().includes(q)&&!(SEGL[d.seg]||'').toLowerCase().includes(q))return false;
+    if(sg&&d.seg!==sg)return false;
+    if(alt==='up'&&d.varPct<1.5)return false;
+    if(alt==='down'&&d.varPct>-1.5)return false;
+    if(alt==='pvp_low'&&(d.pvp==null||d.pvp>=0.90))return false;
+    if(alt==='dy_hi'&&(d.dy==null||d.dy<12))return false;
+    if(alt==='ifix_beat'&&d.vsIfix<=0)return false;
     return true;
   });
 }
 
 function getSorted(data) {
-  return [...data].sort((a, b) => {
-    let va = a[sortCol], vb = b[sortCol];
-    if (va == null) return 1; if (vb == null) return -1;
-    return typeof va === 'string' ? sortDir * va.localeCompare(vb) : sortDir * (va - vb);
-  });
+  return [...data].sort((a,b)=>{ let va=a[sortCol],vb=b[sortCol]; if(va==null)return 1; if(vb==null)return -1; return typeof va==='string'?sortDir*va.localeCompare(vb):sortDir*(va-vb); });
 }
 
 function renderTable() {
-  const flt   = getSorted(getFiltered());
-  const total = flt.length;
-  const rows  = flt.slice(page * PG, (page + 1) * PG);
-
-  document.getElementById('pag-info').textContent =
-    `${page * PG + 1}–${Math.min((page + 1) * PG, total)} de ${total}`;
-  document.getElementById('btn-prev').disabled = page === 0;
-  document.getElementById('btn-next').disabled = (page + 1) * PG >= total;
+  const rows = getSorted(getFiltered());
+  document.getElementById('tbl-count').textContent = rows.length + ' FIIs' + (rows.length < allData.length ? ' (filtrado)' : '');
 
   const tbody = document.getElementById('tbody');
-  if (!rows.length) {
-    tbody.innerHTML = '<tr class="load-row"><td colspan="11">Nenhum FII encontrado com esses filtros.</td></tr>';
-    return;
-  }
+  if(!rows.length){ tbody.innerHTML='<tr class="load-row"><td colspan="11">Nenhum FII com esses filtros.</td></tr>'; return; }
 
-  tbody.innerHTML = rows.map(d => {
-    const alert = Math.abs(d.varPct) >= 2.5;
-    const vc  = d.varPct  > 0 ? 'up' : d.varPct  < 0 ? 'down' : 'neutral';
-    const vic = d.vsIfix  > 0 ? 'up' : d.vsIfix  < 0 ? 'down' : 'neutral';
-    const pvpC = d.pvp == null ? '#8b90a0' : d.pvp < 0.9 ? '#1fcf8a' : d.pvp > 1.1 ? '#f0614a' : '#8b90a0';
-    const pvpW = d.pvp ? Math.min(d.pvp * 34, 46) : 0;
-    const dyC  = d.dy >= 12 ? 'dy-hi' : d.dy >= 9 ? 'dy-mid' : 'dy-lo';
-    const aIcon = alert
-      ? (d.varPct > 0
-        ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1fcf8a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>'
-        : '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f0614a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>')
-      : '';
-
-    return `<tr class="${alert ? 'alert-row' : ''}"
-      title="Último dividendo: ${d.lastDiv ? 'R$ ' + d.lastDiv.toFixed(4) + ' em ' + (d.divDate||'—') : '—'}"
+  tbody.innerHTML = rows.map(d=>{
+    const alert=Math.abs(d.varPct)>=2.5;
+    const vc=d.varPct>0?'up':d.varPct<0?'dn':'neutral';
+    const vic=d.vsIfix>0?'up':d.vsIfix<0?'dn':'neutral';
+    const pvpC=d.pvp==null?'#8b90a0':d.pvp<0.9?'#1fcf8a':d.pvp>1.1?'#f0614a':'#8b90a0';
+    const pvpW=d.pvp?Math.min(d.pvp*32,46):0;
+    const dyC=d.dy>=12?'dy-hi':d.dy>=9?'dy-mid':'dy-lo';
+    const ai=alert?(d.varPct>0?'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1fcf8a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>':'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#f0614a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>'):'';
+    // ref badges para VP e DY
+    const vpRef = d.vpMonth ? `<span class="ref-badge">${d.vpMonth}</span>` : '';
+    const dyRef = d.dyMonth ? `<span class="ref-badge">${d.dyMonth}</span>` : '';
+    const vpTip = d.vpMonth ? `VP referente a ${d.vpMonth}` : '';
+    const dyTip = d.dyMonth ? `DY referente a ${d.dyMonth}` : '';
+    return `<tr class="${alert?'alert-row':''}"
+      title="Último div: ${d.lastDiv?'R$'+d.lastDiv.toFixed(4)+' em '+(d.divDate||'—'):'—'}"
       ondblclick="investigar('${d.ticker}','${fPct(d.varPct)}','${d.pvp?.toFixed(2)||'—'}','${d.dy?.toFixed(1)||'—'}')">
-      <td class="col-tk">
-        <div class="tk-wrap">
-          <span class="seg-dot" style="background:${SEG_COLORS[d.seg]||'#8b90a0'}"></span>
-          ${d.ticker}${aIcon ? '&nbsp;' + aIcon : ''}
-        </div>
-      </td>
-      <td class="col-sg"><span class="seg-lbl">${SEGL[d.seg]||d.seg}</span></td>
-      <td class="col-pr">${fBRL(d.price)}</td>
-      <td class="col-vr"><span class="${vc}">${fPct(d.varPct)}</span></td>
-      <td class="col-vp">${d.vp ? fBRL(d.vp) : '—'}</td>
-      <td class="col-pv">
-        <div class="pvp-wrap">
-          <span style="color:${pvpC};font-weight:500">${d.pvp ? d.pvp.toFixed(2) : '—'}</span>
-          <span class="pvp-bar"><span class="pvp-fill" style="width:${pvpW}px;background:${pvpC}"></span></span>
-        </div>
-      </td>
-      <td class="col-dy"><span class="dy-pill ${dyC}">${d.dy ? d.dy.toFixed(1) + '%' : '—'}</span></td>
-      <td class="col-sp"><canvas class="spark" id="sp-${d.ticker}" width="66" height="22"
-        role="img" aria-label="Sparkline 30 dias ${d.ticker}"></canvas></td>
-      <td class="col-qt">${fN(d.qtd)}</td>
-      <td class="col-vo">${fVol(d.vol)}</td>
-      <td class="col-if"><span class="${vic}">${fPct(d.vsIfix)}</span></td>
+      <td class="c-tk"><div class="tk-w"><span class="seg-dot" style="background:${SEG_COLORS[d.seg]||'#8b90a0'}"></span>${d.ticker}${ai?'&nbsp;'+ai:''}</div></td>
+      <td class="c-sg"><span class="seg-lbl">${SEGL[d.seg]||d.seg}</span></td>
+      <td class="c-pr">${fBRL(d.price)}</td>
+      <td class="c-vr"><span class="${vc}">${fPct(d.varPct)}</span></td>
+      <td class="c-vp" title="${vpTip}">${d.vp?fBRL(d.vp)+''+vpRef:'—'}</td>
+      <td class="c-pv"><div class="pvp-w"><span style="color:${pvpC};font-weight:500">${d.pvp?d.pvp.toFixed(2):'—'}</span><span class="pvp-bar"><span class="pvp-fill" style="width:${pvpW}px;background:${pvpC}"></span></span></div></td>
+      <td class="c-dy" title="${dyTip}"><span class="dy-p ${dyC}">${d.dy?d.dy.toFixed(1)+'%':'—'}</span>${dyRef}</td>
+      <td class="c-sp"><canvas class="spark" id="sp-${d.ticker}" width="60" height="22"></canvas></td>
+      <td class="c-qt">${fN(d.qtd)}</td>
+      <td class="c-vo">${fVol(d.vol)}</td>
+      <td class="c-if"><span class="${vic}">${fPct(d.vsIfix)}</span></td>
     </tr>`;
   }).join('');
 
-  setTimeout(() => {
-    rows.forEach(d => drawSpark('sp-' + d.ticker, d.spark));
-  }, 50);
+  setTimeout(()=>rows.forEach(d=>drawSpark('sp-'+d.ticker,d.spark)),50);
 }
 
-/* ── Render: movimentos ──────────────────────────────────── */
+/* ── movers ─────────────────────────────────────────────── */
 function renderNews() {
-  const movers = [...allData]
-    .sort((a, b) => Math.abs(b.varPct) - Math.abs(a.varPct))
-    .slice(0, 8);
-
-  document.getElementById('news-body').innerHTML = movers.map(d => {
-    const vc  = d.varPct > 0 ? 'up' : 'down';
-    const dir = d.varPct > 0 ? 'subindo' : 'caindo';
-    return `<div class="news-item">
-      <span class="n-tick">${d.ticker}</span>
+  const movers=[...allData].sort((a,b)=>Math.abs(b.varPct)-Math.abs(a.varPct)).slice(0,8);
+  document.getElementById('news-body').innerHTML=movers.map(d=>{
+    const vc=d.varPct>0?'up':'dn';
+    return `<div class="ni">
+      <span class="ni-tk">${d.ticker}</span>
       <span class="${vc}" style="font-weight:700;font-family:var(--mono)">${fPct(d.varPct)}</span>
-      <span class="n-meta">
-        DY ${d.dy ? d.dy.toFixed(1) + '%' : '—'} ·
-        P/VP ${d.pvp ? d.pvp.toFixed(2) : '—'} ·
-        vs IFIX ${fPct(d.vsIfix)} ·
-        último div ${d.lastDiv ? 'R$' + d.lastDiv.toFixed(4) : '—'}
-      </span>
-      <button class="btn-sm" onclick="investigar('${d.ticker}','${fPct(d.varPct)}','${d.pvp?.toFixed(2)||'—'}','${d.dy?.toFixed(1)||'—'}')">
-        Investigar →
-      </button>
+      <span class="ni-m">DY ${d.dy?d.dy.toFixed(1)+'%':'—'}${d.dyMonth?' ('+d.dyMonth+')':''} · P/VP ${d.pvp?d.pvp.toFixed(2):'—'} · vs IFIX ${fPct(d.vsIfix)} · último div ${d.lastDiv?'R$'+d.lastDiv.toFixed(4):'—'}</span>
+      <button class="btn-sm" onclick="investigar('${d.ticker}','${fPct(d.varPct)}','${d.pvp?.toFixed(2)||'—'}','${d.dy?.toFixed(1)||'—'}')">Investigar →</button>
     </div>`;
   }).join('');
 }
 
-/* ── Render: por segmento ────────────────────────────────── */
-function renderSegPanel() {
-  const segs = {};
-  allData.forEach(d => {
-    if (!segs[d.seg]) segs[d.seg] = { count:0, varSum:0, dySum:0, pvpSum:0, pvpN:0, vol:0 };
-    segs[d.seg].count++;
-    segs[d.seg].varSum += d.varPct;
-    if (d.dy)  segs[d.seg].dySum  += d.dy;
-    if (d.pvp) { segs[d.seg].pvpSum += d.pvp; segs[d.seg].pvpN++; }
-    segs[d.seg].vol += d.vol || 0;
-  });
-
-  document.getElementById('seg-grid').innerHTML = Object.entries(segs).map(([sg, s]) => {
-    const avgV   = s.varSum / s.count;
-    const avgDy  = s.dySum  / s.count;
-    const avgPvp = s.pvpN ? s.pvpSum / s.pvpN : null;
-    const vsIf   = avgV - ifixVar;
-    const vc     = avgV > 0 ? 'up' : avgV < 0 ? 'down' : 'neutral';
-    const bW     = Math.min(Math.abs(vsIf) * 18, 100);
-    const bC     = vsIf >= 0 ? '#1fcf8a' : '#f0614a';
-    const col    = SEG_COLORS[sg] || '#8b90a0';
-    return `<div class="seg-card">
-      <div class="seg-card-name" style="color:${col}">
-        ${SEGL[sg]||sg}
-        <span style="font-size:11px;color:var(--text3);font-weight:400">(${s.count})</span>
-      </div>
-      <div class="seg-row"><span>Var. média</span><span class="${vc}">${fPct(avgV)}</span></div>
-      <div class="seg-row"><span>vs IFIX</span><span style="color:${bC}">${fPct(vsIf)}</span></div>
-      <div class="seg-row"><span>DY médio</span><span>${avgDy ? avgDy.toFixed(1) + '%' : '—'}</span></div>
-      <div class="seg-row"><span>P/VP médio</span><span>${avgPvp ? avgPvp.toFixed(2) : '—'}</span></div>
-      <div class="seg-row"><span>Volume</span><span>${fVol(s.vol)}</span></div>
-      <div class="ifix-bar-wrap">
-        <div class="ifix-bar-fill" style="width:${bW}%;background:${bC}"></div>
-      </div>
+/* ── por segmento ───────────────────────────────────────── */
+function renderSeg() {
+  const segs={};
+  allData.forEach(d=>{ if(!segs[d.seg])segs[d.seg]={n:0,vs:0,ds:0,ps:0,pn:0,vol:0}; segs[d.seg].n++; segs[d.seg].vs+=d.varPct; if(d.dy)segs[d.seg].ds+=d.dy; if(d.pvp){segs[d.seg].ps+=d.pvp;segs[d.seg].pn++;} segs[d.seg].vol+=d.vol||0; });
+  document.getElementById('seg-grid').innerHTML=Object.entries(segs).map(([sg,s])=>{
+    const av=s.vs/s.n, ad=s.ds/s.n, ap=s.pn?s.ps/s.pn:null, vi=av-ifixVar;
+    const vc=av>0?'up':av<0?'dn':'neutral', bC=vi>=0?'#1fcf8a':'#f0614a', bW=Math.min(Math.abs(vi)*18,100);
+    return `<div class="sc">
+      <div class="sc-name" style="color:${SEG_COLORS[sg]||'#8b90a0'}">${SEGL[sg]||sg} <span style="font-size:11px;color:var(--tx3);font-weight:400">(${s.n})</span></div>
+      <div class="sc-row"><span>Var. média</span><span class="${vc}">${fPct(av)}</span></div>
+      <div class="sc-row"><span>vs IFIX</span><span style="color:${bC}">${fPct(vi)}</span></div>
+      <div class="sc-row"><span>DY médio</span><span>${ad?ad.toFixed(1)+'%':'—'}</span></div>
+      <div class="sc-row"><span>P/VP médio</span><span>${ap?ap.toFixed(2):'—'}</span></div>
+      <div class="sc-row"><span>Volume</span><span>${fVol(s.vol)}</span></div>
+      <div class="ib-wrap"><div class="ib-fill" style="width:${bW}%;background:${bC}"></div></div>
     </div>`;
   }).join('');
 }
 
-/* ── Interações ──────────────────────────────────────────── */
-function investigar(ticker, varPct, pvp, dy) {
-  const url = `https://claude.ai/new?q=${encodeURIComponent(
-    `Sou analista de FIIs. Analise o ${ticker} — variação hoje: ${varPct}, P/VP: ${pvp}, DY anual: ${dy}%. Busque fatos relevantes recentes, comunicados ou eventos corporativos que expliquem o movimento. Dê uma avaliação de curto prazo.`
-  )}`;
-  window.open(url, '_blank');
-}
-
+/* ── sort ───────────────────────────────────────────────── */
 function srt(col) {
-  if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = -1; }
-  page = 0;
-  document.querySelectorAll('[id^="sa-"]').forEach(el => el.textContent = '↕');
-  const el = document.getElementById('sa-' + col);
-  if (el) el.textContent = sortDir === -1 ? '↓' : '↑';
+  if(sortCol===col)sortDir*=-1; else{sortCol=col;sortDir=-1;}
+  document.querySelectorAll('[id^="sa-"]').forEach(el=>el.textContent='↕');
+  const el=document.getElementById('sa-'+col); if(el)el.textContent=sortDir===-1?'↓':'↑';
   renderTable();
 }
 
-function chPg(d) {
-  const max = Math.ceil(getFiltered().length / PG) - 1;
-  page = Math.max(0, Math.min(page + d, max));
-  renderTable();
+/* ── investigar (abre Claude) ───────────────────────────── */
+function investigar(ticker,varPct,pvp,dy){
+  window.open(`https://claude.ai/new?q=${encodeURIComponent('Sou analista de FIIs. Analise o '+ticker+' — variação hoje: '+varPct+', P/VP: '+pvp+', DY anual: '+dy+'%. Busque fatos relevantes recentes, comunicados ou eventos corporativos que expliquem o movimento e dê uma avaliação de curto prazo.')}`, '_blank');
 }
 
-function switchTab(name, btn) {
-  activeTab = name;
-  document.getElementById('tab-fiis').style.display = name === 'fiis' ? '' : 'none';
-  document.getElementById('tab-seg').style.display  = name === 'seg'  ? '' : 'none';
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-/* ── Init ────────────────────────────────────────────────── */
+/* ── init ───────────────────────────────────────────────── */
 loadData();
-setInterval(loadData, 5 * 60 * 1000); // atualiza a cada 5 min durante o pregão
+setInterval(loadData, 5*60*1000);
 </script>
 </body>
 </html>
