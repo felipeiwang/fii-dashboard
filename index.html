@@ -199,7 +199,7 @@
 <script>
 /* ── CONFIG ─────────────────────────────────────────────────────── */
 // Token brapi.dev — substitua pelo seu em https://brapi.dev (plano free funciona)
-const BRAPI_TOKEN = '2ZCy61RpNMhwi6vquG6xco';
+const BRAPI_TOKEN = 'demo';
 const BRAPI = `https://brapi.dev/api/quote/`;
 
 /* ── LISTA IFIX B3 OFICIAL ───────────────────────────────────────── */
@@ -252,44 +252,47 @@ const fVolR = v => {
 };
 
 /* ── BRAPI: cotação em lote (até 50 por chamada) ─────────────────── */
+// TAMANHO DO LOTE — ajuste conforme seu plano brapi:
+// Gratuito = 1 | Startup = 10 | Pro = 20
+const BRAPI_LOTE = 1;
+const BRAPI_DELAY = 120; // ms entre lotes (evita rate limit)
+
 async function fetchBrapiLote(tickers) {
   const out = {};
-  // divide em lotes de 50
   const chunk = (arr, n) => Array.from({length: Math.ceil(arr.length/n)}, (_,i) => arr.slice(i*n,i*n+n));
-  const lotes = chunk(tickers, 50);
+  const lotes = chunk(tickers, BRAPI_LOTE);
+  const sleep = ms => new Promise(res => setTimeout(res, ms));
 
-  await Promise.all(lotes.map(async lote => {
+  // atualiza contador de progresso na tela
+  const dot = document.getElementById('live-dot');
+  let done = 0;
+
+  for (const lote of lotes) {
     try {
       const symbols = lote.join(',');
       const url = `${BRAPI}${symbols}?token=${BRAPI_TOKEN}&range=1mo&interval=1d&fundamental=false`;
       const r = await fetch(url);
-      if (!r.ok) return;
+      if (!r.ok) { done += lote.length; continue; }
       const j = await r.json();
       for (const q of (j.results || [])) {
         const tk = q.symbol;
-        // volume financeiro = volume em cotas × preço
-        const price   = q.regularMarketPrice;
+        const price    = q.regularMarketPrice;
         const volCotas = q.regularMarketVolume || 0;
-        const volDia  = price ? volCotas * price : null;
-
-        // histórico 30d para sparkline e volume mês
-        const hist    = q.historicalDataPrice || [];
-        const closes  = hist.map(h => h.close).filter(Boolean);
-        const vols    = hist.map(h => h.volume).filter(Boolean);
-        const avgPx   = closes.length ? closes.reduce((a,b)=>a+b,0)/closes.length : price;
-        const volMes  = avgPx ? vols.reduce((a,b)=>a+b,0) * avgPx : null;
-
-        out[tk] = {
-          price,
-          varPct:  q.regularMarketChangePercent,
-          volDia,
-          volMes,
-          spark:   closes.slice(-30),
-        };
+        const volDia   = price ? volCotas * price : null;
+        const hist     = q.historicalDataPrice || [];
+        const closes   = hist.map(h => h.close).filter(Boolean);
+        const vols     = hist.map(h => h.volume).filter(Boolean);
+        const avgPx    = closes.length ? closes.reduce((a,b)=>a+b,0)/closes.length : price;
+        const volMes   = avgPx ? vols.reduce((a,b)=>a+b,0) * avgPx : null;
+        out[tk] = { price, varPct: q.regularMarketChangePercent, volDia, volMes, spark: closes.slice(-30) };
         if (closes.length) sparkCache[tk] = closes.slice(-30);
       }
-    } catch(e) { console.warn('brapi lote:', e.message); }
-  }));
+    } catch(e) { console.warn('brapi:', e.message); }
+
+    done += lote.length;
+    dot.textContent = `CARREGANDO ${done}/${tickers.length}`;
+    if (BRAPI_DELAY > 0) await sleep(BRAPI_DELAY);
+  }
 
   return out;
 }
@@ -353,7 +356,7 @@ async function loadData() {
   const nOk  = allData.filter(d => d.price).length;
   const now  = new Date().toLocaleTimeString('pt-BR');
   document.getElementById('ts').textContent =
-    `Atualizado às ${now} · ${nOk}/${IFIX.length} cotações · brapi.dev (~15min delay) · atualiza a cada 5min`;
+    `Atualizado às ${now} · ${nOk}/${IFIX.length} cotações · brapi.dev (~15min delay) · clique em Atualizar para recarregar`;
   document.getElementById('tbl-count').textContent =
     allData.length + ' FIIs';
 
@@ -540,8 +543,8 @@ function investigar(ticker,varPct,pvp,caixa,lastRend){
 }
 
 /* ── INIT ────────────────────────────────────────────────────────── */
+// Atualização somente manual via botão — preserva cota do plano gratuito brapi
 loadData();
-setInterval(loadData, 5*60*1000);
 </script>
 </body>
 </html>
