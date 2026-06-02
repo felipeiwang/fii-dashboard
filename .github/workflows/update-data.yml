@@ -1,0 +1,50 @@
+name: Atualizar dados FIIs
+ 
+on:
+  schedule:
+    # 21:00 UTC = 18:00 BRT (todo dia util, seg a sex)
+    - cron: '0 21 * * 1-5'
+  # Permite rodar manualmente pela aba "Actions" no GitHub
+  workflow_dispatch:
+ 
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # necessario para commitar o JSON atualizado
+ 
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+ 
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+ 
+      - name: Instalar dependencias
+        run: |
+          pip install requests beautifulsoup4 lxml
+ 
+      - name: Executar script de atualizacao
+        run: python scripts/fetch_fiis.py
+ 
+      - name: Commitar dados atualizados
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "data: atualiza FIIs ${{ github.run_number }} (${{ env.TODAY }})"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          file_pattern: "data/fiis.json"
+        env:
+          TODAY: ${{ steps.date.outputs.date }}
+ 
+      - name: Resumo da execucao
+        run: |
+          echo "### Atualizacao concluida" >> $GITHUB_STEP_SUMMARY
+          echo "Data: $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "Arquivo: data/fiis.json" >> $GITHUB_STEP_SUMMARY
+          echo "Tickers: $(python -c "import json; d=json.load(open('data/fiis.json')); print(len([k for k in d if not k.startswith('_')]))")" >> $GITHUB_STEP_SUMMARY
