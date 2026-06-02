@@ -1,29 +1,29 @@
 #!/usr/bin/env python3
 """
 Atualiza data/fiis.json com dados fundamentalistas dos FIIs do IFIX.
-- Lista de tickers buscada dinamicamente do fiis.com.br (sempre atualizada)
-- VP/cota, DY, ultimo dividendo: Status Invest
-- Fallback: brapi.dev
-Execucao: python scripts/fetch_fiis.py
-          ou automaticamente via GitHub Actions todo dia util as 18h BRT
+
+Fontes:
+  - Lista IFIX: fiis.com.br (dinâmica) ou fallback hardcoded B3
+  - P/VP, caixa%, último rendimento: Status Invest API interna
+  - Fallback de P/VP: calculado via VP/cota do Investidor10
+
+Execução: python scripts/fetch_fiis.py
+          ou automaticamente via GitHub Actions todo dia útil às 18h BRT
 """
 
-import json, time, datetime, re, os
+import json, time, datetime, re, os, sys
 import requests
 from bs4 import BeautifulSoup
 
 HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0.0.0 Safari/537.36"
-    ),
-    "Accept-Language": "pt-BR,pt;q=0.9",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.8",
+    "Accept": "application/json, text/html, */*",
 }
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "fiis.json")
 
-# Segmentos por ticker (mantidos localmente — raramente mudam)
+# ── Segmentos oficiais B3 ───────────────────────────────────────────────
 SEGMENTS = {
     # CRI / Papel
     "CACR11":"CRI","AFHI11":"CRI","RZAT11":"CRI","AZPL11":"CRI","BCRI11":"CRI",
@@ -57,32 +57,6 @@ SEGMENTS = {
 }
 
 
-def fetch_ifix_tickers() -> list[tuple[str, str]]:
-    """Busca lista atualizada de tickers do IFIX em fiis.com.br."""
-    print("  Buscando composicao atual do IFIX em fiis.com.br...")
-    try:
-        resp = requests.get("https://fiis.com.br/ifix/", headers=HEADERS, timeout=20)
-        resp.raise_for_status()
-        soup = BeautifulSoup(resp.text, "html.parser")
-        tickers = []
-        seen = set()
-        for a in soup.find_all("a", href=re.compile(r"/[a-z]{4}11/")):
-            ticker = a.get_text(strip=True).upper()
-            if re.match(r"^[A-Z]{4}11$", ticker) and ticker not in seen:
-                seen.add(ticker)
-                seg = SEGMENTS.get(ticker, "HYB")
-                tickers.append((ticker, seg))
-        if len(tickers) >= 50:
-            print(f"  {len(tickers)} tickers encontrados no IFIX.")
-            return tickers
-    except Exception as e:
-        print(f"  [WARN] Nao foi possivel buscar lista do IFIX: {e}")
-
-    # Fallback: lista conhecida hardcoded
-    print("  Usando lista fallback hardcoded.")
-    return [(t, s) for t, s in SEGMENTS.items()]
-
-
 def load_existing() -> dict:
     try:
         with open(DATA_PATH, "r", encoding="utf-8") as f:
@@ -91,126 +65,184 @@ def load_existing() -> dict:
         return {}
 
 
+def fetch_ifix_tickers() -> list:
+    """Busca composição atual do IFIX em fiis.com.br."""
+    print("  Buscando composição IFIX em fiis.com.br...")
+    try:
+        r = requests.get("https://fiis.com.br/ifix/", headers=HEADERS, timeout=20)
+        r.raise_for_status()
+        soup = BeautifulSoup(r.text, "lxml")
+        tickers, seen = [], set()
+        for a in soup.find_all("a", href=re.compile(r"/[a-z]{4}11/")):
+            tk = a.get_text(strip=True).upper()
+            if re.match(r"^[A-Z]{4}11$", tk) and tk not in seen:
+                seen.add(tk)
+                tickers.append((tk, SEGMENTS.get(tk, "HYB")))
+        if len(tickers) >= 80:
+            print(f"  {len(tickers)} tickers encontrados.")
+            return tickers
+    except Exception as e:
+        print(f"  [WARN] fiis.com.br: {e}")
+    print("  Usando lista fallback B3.")
+    return [(t, s) for t, s in SEGMENTS.items()]
+
+
 def fetch_status_invest(ticker: str) -> dict:
-    """Busca VP, DY e ultimo dividendo no Status Invest."""
-    url = f"https://statusinvest.com.br/fundos-imobiliarios/{ticker.lower()}"
+    """
+    Busca P/VP, caixa% e último rendimento via API interna do Status Invest.
+    O site usa endpoint JSON próprio que é mais estável que scraping HTML.
+    """
+    result = {}
+
+    # ── Endpoint 1: dados gerais / indicadores ──────────────────────────
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=15)
-        resp.raise_for_status()
-        soup = BeautifulSoup(resp.text, "html.parser")
-        result = {}
+        url = f"https://statusinvest.com.br/fii/tickerprice?ticker={ticker}&type=4"
+        hdrs = {**HEADERS, "Referer": f"https://statusinvest.com.br/fundos-imobiliarios/{ticker.lower()}",
+                "X-Requested-With": "XMLHttpRequest"}
+        r = requests.get(url, headers=hdrs, timeout=15)
+        if r.status_code == 200:
+            j = r.json()
+            # mapear campos — o SI retorna estrutura variada
+            for key in ("p_vp", "pvp", "p/vp"):
+                if j.get(key) not in (None, "", 0):
+                    try: result["pvp_live"] = float(str(j[key]).replace(",",".")); break
+                    except: pass
+            for key in ("ativo_caixa_porcent", "caixa_porcent", "caixa", "cash_porcent"):
+                if j.get(key) not in (None, ""):
+                    try: result["caixa"] = float(str(j[key]).replace(",",".")); break
+                    except: pass
+    except Exception as e:
+        print(f"    [SI API1] {ticker}: {e}")
 
-        for div in soup.find_all("div", class_="info"):
-            title = div.find("span", class_="title")
-            value = div.find("strong", class_="value")
-            if not title or not value:
-                continue
-            t = title.get_text(strip=True).lower()
-            v_raw = (value.get_text(strip=True)
-                     .replace("R$", "").replace(".", "").replace(",", ".").strip())
-            try:
-                v = float(v_raw)
-            except ValueError:
-                continue
-            if "valor patrimonial" in t or "vp/cota" in t:
-                result["vp"] = round(v, 2)
-            elif "dy" in t or "dividend yield" in t:
-                result["dy"] = round(v, 2)
-            elif "p/vp" in t:
-                result["pvpRef"] = round(v, 2)
+    # ── Endpoint 2: último rendimento ────────────────────────────────────
+    try:
+        url2 = f"https://statusinvest.com.br/fii/dividends?ticker={ticker}"
+        hdrs2 = {**HEADERS, "Referer": f"https://statusinvest.com.br/fundos-imobiliarios/{ticker.lower()}",
+                 "X-Requested-With": "XMLHttpRequest", "Accept": "application/json"}
+        r2 = requests.get(url2, headers=hdrs2, timeout=15)
+        if r2.status_code == 200:
+            j2 = r2.json()
+            # estrutura esperada: lista de dividendos ordenada por data desc
+            divs = j2 if isinstance(j2, list) else j2.get("assetEarningsModels", [])
+            if divs:
+                last = divs[0]
+                for key in ("earningsPerShare", "value", "provento", "rendimento"):
+                    if last.get(key) not in (None, ""):
+                        try: result["lastRend"] = float(str(last[key]).replace(",",".")); break
+                        except: pass
+                for key in ("paymentDate", "ed", "dataCom", "data"):
+                    if last.get(key):
+                        result["lastRendDate"] = str(last[key])[:10]; break
+    except Exception as e:
+        print(f"    [SI API2] {ticker}: {e}")
 
-        div_table = soup.find("table", {"id": re.compile(r"dividend", re.I)})
-        if div_table:
-            for row in div_table.find_all("tr")[1:2]:
-                cols = row.find_all("td")
-                if len(cols) >= 2:
-                    raw_val = (cols[1].get_text(strip=True)
-                               .replace("R$", "").replace(".", "").replace(",", ".").strip())
-                    raw_date = cols[0].get_text(strip=True)
+    # ── Fallback: scraping da página HTML ────────────────────────────────
+    if not result.get("pvp_live") or not result.get("lastRend"):
+        try:
+            url3 = f"https://statusinvest.com.br/fundos-imobiliarios/{ticker.lower()}"
+            hdrs3 = {**HEADERS, "Referer": "https://statusinvest.com.br/fundos-imobiliarios"}
+            r3 = requests.get(url3, headers=hdrs3, timeout=20)
+            if r3.status_code == 200:
+                soup = BeautifulSoup(r3.text, "lxml")
+
+                for div in soup.find_all("div", class_="info"):
+                    title = div.find(["span","h3"], class_="title")
+                    value = div.find(["strong","span"], class_="value")
+                    if not title or not value: continue
+                    t = title.get_text(strip=True).lower()
+                    v_raw = value.get_text(strip=True).replace("R$","").replace(".","").replace(",",".").strip()
                     try:
-                        result["lastDiv"] = round(float(raw_val), 4)
-                        result["divDate"] = raw_date
-                    except ValueError:
-                        pass
-        return result
-    except Exception as e:
-        print(f"[WARN] {ticker}: {e}")
-        return {}
+                        v = float(v_raw)
+                        if ("p/vp" in t or "pvp" in t) and not result.get("pvp_live"):
+                            result["pvp_live"] = v
+                        elif ("caixa" in t or "liquidez" in t) and "%" in value.get_text() and not result.get("caixa"):
+                            result["caixa"] = v
+                    except: pass
 
+                # Último rendimento — busca no histórico de dividendos da página
+                for table in soup.find_all("table"):
+                    rows_t = table.find_all("tr")
+                    if len(rows_t) >= 2:
+                        header = [th.get_text(strip=True).lower() for th in rows_t[0].find_all(["th","td"])]
+                        if any("rendimento" in h or "valor" in h or "provento" in h for h in header):
+                            cols = rows_t[1].find_all("td")
+                            if len(cols) >= 2:
+                                for ci, col in enumerate(cols):
+                                    v_raw = col.get_text(strip=True).replace("R$","").replace(".","").replace(",",".").strip()
+                                    try:
+                                        v = float(v_raw)
+                                        if 0.01 < v < 50 and not result.get("lastRend"):
+                                            result["lastRend"] = v
+                                    except: pass
+                                # data
+                                date_pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
+                                for col in cols:
+                                    m = date_pattern.search(col.get_text())
+                                    if m and not result.get("lastRendDate"):
+                                        result["lastRendDate"] = m.group(); break
+                            break
+        except Exception as e:
+            print(f"    [SI scrape] {ticker}: {e}")
 
-def fetch_brapi_fundamentals(ticker: str) -> dict:
-    """Fallback via brapi.dev."""
-    url = f"https://brapi.dev/api/quote/{ticker}?modules=summaryProfile,defaultKeyStatistics&token=demo"
-    try:
-        resp = requests.get(url, headers=HEADERS, timeout=10)
-        resp.raise_for_status()
-        r = resp.json().get("results", [{}])[0]
-        result = {}
-        if bv := r.get("bookValue"):
-            result["vp"] = round(float(bv), 2)
-        if dy := r.get("dividendYield"):
-            result["dy"] = round(float(dy) * 100, 2)
-        return result
-    except Exception as e:
-        print(f"[brapi fallback] {ticker}: {e}")
-        return {}
+    return result
 
 
 def main():
     now = datetime.datetime.now()
-    ref_month = now.strftime("%m/%Y")  # ex: "06/2025"
-    print(f"[{now.strftime('%Y-%m-%d %H:%M:%S')}] Iniciando atualizacao — referencia: {ref_month}")
+    ref_month = now.strftime("%m/%Y")
+    print(f"[{now.strftime('%Y-%m-%d %H:%M:%S')}] Iniciando atualização — ref: {ref_month}")
 
-    tickers = fetch_ifix_tickers()
+    tickers  = fetch_ifix_tickers()
     existing = load_existing()
 
     updated = {
         "_meta": {
-            "updated": datetime.date.today().isoformat(),
-            "refMonth": ref_month,
-            "source": "Status Invest / brapi.dev",
+            "updated":    datetime.date.today().isoformat(),
+            "refMonth":   ref_month,
+            "source":     "Status Invest",
             "tickerCount": len(tickers),
-            "note": "Atualizado automaticamente via GitHub Actions todo dia util as 18h BRT"
+            "note":       "Atualizado via GitHub Actions todo dia útil 18h BRT"
         }
     }
 
+    ok_pvp, ok_rend, ok_caixa = 0, 0, 0
+
     for i, (ticker, seg) in enumerate(tickers, 1):
-        print(f"  [{i:02d}/{len(tickers)}] {ticker}...", end=" ", flush=True)
+        print(f"  [{i:03d}/{len(tickers)}] {ticker}...", end=" ", flush=True)
+        prev   = existing.get(ticker, {})
+        new_d  = fetch_status_invest(ticker)
 
-        prev = existing.get(ticker, {})
-        new_data = fetch_status_invest(ticker)
-        if not new_data.get("vp"):
-            new_data.update(fetch_brapi_fundamentals(ticker))
+        merged = {**prev, "seg": seg}
 
-        merged = {**prev}
-        merged["seg"] = seg
+        if new_d.get("pvp_live"):
+            merged["pvp_live"] = new_d["pvp_live"]
+            ok_pvp += 1
+            print(f"PVP={new_d['pvp_live']:.2f}", end=" ")
+        if new_d.get("caixa") is not None:
+            merged["caixa"] = new_d["caixa"]
+            ok_caixa += 1
+            print(f"CX={new_d['caixa']:.1f}%", end=" ")
+        if new_d.get("lastRend"):
+            merged["lastRend"]     = new_d["lastRend"]
+            merged["lastRendDate"] = new_d.get("lastRendDate", "")
+            ok_rend += 1
+            print(f"REND={new_d['lastRend']:.4f}", end=" ")
 
-        if new_data.get("vp"):
-            merged["vp"] = new_data["vp"]
-            merged["vpMonth"] = ref_month   # mes/ano da referencia
-            print(f"VP={new_data['vp']}", end=" ")
-        if new_data.get("dy"):
-            merged["dy"] = new_data["dy"]
-            merged["dyMonth"] = ref_month   # mes/ano da referencia
-            print(f"DY={new_data['dy']}%", end=" ")
-        if new_data.get("pvpRef"):
-            merged["pvpRef"] = new_data["pvpRef"]
-        if new_data.get("lastDiv"):
-            merged["lastDiv"] = new_data["lastDiv"]
-            merged["divDate"] = new_data.get("divDate", "")
         merged.pop("_meta", None)
-        print()
-
         updated[ticker] = merged
-        time.sleep(1.2)
+        print()
+        time.sleep(1.5)  # respeita rate limit do SI
 
     os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
     with open(DATA_PATH, "w", encoding="utf-8") as f:
         json.dump(updated, f, ensure_ascii=False, indent=2)
 
-    ok = sum(1 for t, _ in tickers if updated.get(t, {}).get("vp"))
-    print(f"\nConcluido: {ok}/{len(tickers)} tickers com VP/cota atualizado.")
-    print(f"Arquivo: {DATA_PATH}")
+    print(f"\n{'='*55}")
+    print(f"Concluído: {len(tickers)} tickers")
+    print(f"  P/VP:           {ok_pvp}/{len(tickers)}")
+    print(f"  Caixa%:         {ok_caixa}/{len(tickers)}")
+    print(f"  Último rendim.: {ok_rend}/{len(tickers)}")
+    print(f"  Arquivo: {DATA_PATH}")
 
 
 if __name__ == "__main__":
