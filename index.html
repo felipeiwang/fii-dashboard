@@ -9,28 +9,17 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg:     #0d0f14;
-      --bg2:    #141720;
-      --bg3:    #1c2030;
-      --bdr:    rgba(255,255,255,0.07);
-      --bdr2:   rgba(255,255,255,0.13);
-      --tx:     #e8eaf0;
-      --tx2:    #8b90a0;
-      --tx3:    #555b6e;
-      --up:     #1fcf8a;
-      --dn:     #f0614a;
-      --gold:   #f0b840;
-      --blue:   #4d9de0;
-      --font:   'Syne', sans-serif;
-      --mono:   'IBM Plex Mono', monospace;
-      --r:      8px;
-      --rl:     14px;
+      --bg:   #0d0f14; --bg2: #141720; --bg3: #1c2030;
+      --bdr:  rgba(255,255,255,0.07); --bdr2: rgba(255,255,255,0.13);
+      --tx:   #e8eaf0; --tx2: #8b90a0; --tx3: #555b6e;
+      --up:   #1fcf8a; --dn:  #f0614a; --gold: #f0b840; --blue: #4d9de0;
+      --font: 'Syne', sans-serif; --mono: 'IBM Plex Mono', monospace;
+      --r: 8px; --rl: 14px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--tx); font-family: var(--font); font-size: 14px; }
-
-    .shell { max-width: 1400px; margin: 0 auto; padding: 0 24px 64px; }
+    .shell { max-width: 1500px; margin: 0 auto; padding: 0 24px 64px; }
 
     /* header */
     .hdr { display:flex; justify-content:space-between; align-items:center; padding:28px 0 20px; border-bottom:0.5px solid var(--bdr2); margin-bottom:28px; gap:16px; flex-wrap:wrap; }
@@ -39,12 +28,13 @@
     .hdr-sub { font-size:12px; color:var(--tx3); margin-top:4px; font-family:var(--mono); }
     .live { display:flex; align-items:center; gap:6px; font-size:11px; font-family:var(--mono); font-weight:500; }
     .live::before { content:''; width:7px; height:7px; border-radius:50%; }
-    .live.ok  { color:var(--up);   } .live.ok::before  { background:var(--up);   animation:pulse 2s infinite; }
-    .live.load{ color:var(--gold); } .live.load::before{ background:var(--gold); }
-    @keyframes pulse{ 0%,100%{opacity:1}50%{opacity:.3} }
+    .live.ok   { color:var(--up);   } .live.ok::before   { background:var(--up);   animation:pulse 2s infinite; }
+    .live.load { color:var(--gold); } .live.load::before { background:var(--gold); }
+    .live.err  { color:var(--dn);   } .live.err::before  { background:var(--dn);   }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
     /* section titles */
-    .sec-title { font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--tx3); font-family:var(--mono); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .sec-title { font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--tx3); font-family:var(--mono); margin-bottom:14px; display:flex; align-items:center; gap:10px; }
     .sec-title::after { content:''; flex:1; height:0.5px; background:var(--bdr); }
 
     /* summary */
@@ -56,59 +46,54 @@
     .up{color:var(--up)}.dn{color:var(--dn)}.gold{color:var(--gold)}.neutral{color:var(--tx2)}
 
     /* controls */
-    .ctrl { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
-    .ctrl input,.ctrl select { background:var(--bg2); border:0.5px solid var(--bdr2); border-radius:var(--r); color:var(--tx); font-family:var(--font); font-size:13px; padding:0 12px; height:34px; outline:none; }
-    .ctrl input { flex:1; min-width:180px; max-width:280px; }
+    .ctrl { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:10px; }
+    .ctrl input, .ctrl select { background:var(--bg2); border:0.5px solid var(--bdr2); border-radius:var(--r); color:var(--tx); font-family:var(--font); font-size:13px; padding:0 12px; height:34px; outline:none; }
+    .ctrl input { flex:1; min-width:180px; max-width:260px; }
     .ctrl input::placeholder { color:var(--tx3); }
-    .ctrl input:focus,.ctrl select:focus { border-color:var(--blue); }
+    .ctrl input:focus, .ctrl select:focus { border-color:var(--blue); }
     .ctrl select option { background:var(--bg2); }
     .btn { height:34px; padding:0 16px; background:var(--bg2); border:0.5px solid var(--bdr2); border-radius:var(--r); color:var(--tx); font-family:var(--font); font-size:13px; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all .15s; white-space:nowrap; }
     .btn:hover { border-color:var(--blue); color:var(--blue); }
     .btn:disabled { opacity:.4; cursor:not-allowed; }
 
-    /* table — full scroll, no pagination */
+    /* table */
+    .tbl-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12px; color:var(--tx3); font-family:var(--mono); flex-wrap:wrap; gap:4px; }
     .twrap { overflow-x:auto; border:0.5px solid var(--bdr); border-radius:var(--rl); margin-bottom:36px; }
-    table { width:100%; border-collapse:collapse; font-size:12.5px; table-layout:fixed; min-width:980px; }
-    thead { background:var(--bg2); position:sticky; top:0; z-index:10; }
-    thead th { font-size:10px; font-weight:500; color:var(--tx3); text-transform:uppercase; letter-spacing:.06em; font-family:var(--mono); padding:10px 11px; border-bottom:0.5px solid var(--bdr); text-align:right; cursor:pointer; white-space:nowrap; user-select:none; }
+    table { width:100%; border-collapse:collapse; font-size:12.5px; table-layout:fixed; min-width:1000px; }
+    thead { background:var(--bg2); }
+    thead th { font-size:10px; font-weight:500; color:var(--tx3); text-transform:uppercase; letter-spacing:.06em; font-family:var(--mono); padding:10px 10px; border-bottom:0.5px solid var(--bdr); text-align:right; cursor:pointer; white-space:nowrap; user-select:none; position:sticky; top:0; background:var(--bg2); z-index:5; }
     thead th:first-child { text-align:left; }
     thead th:hover { color:var(--tx); }
+    thead th.sa { color:var(--blue); }
     tbody tr { border-bottom:0.5px solid var(--bdr); transition:background .1s; cursor:pointer; }
     tbody tr:last-child { border-bottom:none; }
     tbody tr:hover { background:var(--bg2); }
-    tbody td { padding:8px 11px; text-align:right; color:var(--tx); white-space:nowrap; font-variant-numeric:tabular-nums; }
+    tbody td { padding:8px 10px; text-align:right; color:var(--tx); white-space:nowrap; font-variant-numeric:tabular-nums; }
     tbody td:first-child { text-align:left; font-weight:500; }
     .alert-row { background:rgba(240,184,64,.04); }
     .alert-row:hover { background:rgba(240,184,64,.09); }
 
-    /* ticker cell */
+    /* cells */
     .tk-w { display:flex; align-items:center; gap:7px; }
     .seg-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
     .seg-lbl { font-size:10px; color:var(--tx3); font-family:var(--mono); background:var(--bg3); border:0.5px solid var(--bdr2); padding:1px 5px; border-radius:4px; }
-
-    /* pvp bar */
     .pvp-w { display:flex; align-items:center; gap:5px; }
-    .pvp-bar { width:34px; height:4px; border-radius:2px; background:var(--bg3); overflow:hidden; }
+    .pvp-bar { width:32px; height:4px; border-radius:2px; background:var(--bg3); overflow:hidden; }
     .pvp-fill { height:100%; border-radius:2px; }
-
-    /* dy pill */
-    .dy-p { font-size:11px; padding:2px 7px; border-radius:4px; font-family:var(--mono); font-weight:500; }
-    .dy-hi  { background:rgba(31,207,138,.12); color:#1fcf8a; border:0.5px solid rgba(31,207,138,.25); }
-    .dy-mid { background:rgba(240,184,64,.10); color:#f0b840;  border:0.5px solid rgba(240,184,64,.22); }
-    .dy-lo  { background:var(--bg3); color:var(--tx2); border:0.5px solid var(--bdr2); }
-
-    /* ref badge */
-    .ref-badge { font-size:9px; font-family:var(--mono); color:var(--tx3); background:var(--bg3); border:0.5px solid var(--bdr); border-radius:3px; padding:1px 4px; margin-left:3px; vertical-align:middle; }
-
-    /* sparkline */
+    .rend-val { font-weight:500; }
+    .rend-date { font-size:10px; color:var(--tx3); font-family:var(--mono); display:block; margin-top:1px; }
+    .caixa-pill { font-size:11px; padding:2px 6px; border-radius:4px; font-family:var(--mono); font-weight:500; background:var(--bg3); border:0.5px solid var(--bdr2); color:var(--tx2); }
+    .caixa-hi { background:rgba(77,157,224,.10); color:var(--blue); border-color:rgba(77,157,224,.25); }
     canvas.spark { display:block; }
+    .src-badge { font-size:9px; font-family:var(--mono); color:var(--tx3); background:var(--bg3); border:0.5px solid var(--bdr); border-radius:3px; padding:1px 4px; margin-left:3px; }
 
-    /* count bar */
-    .tbl-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12px; color:var(--tx3); font-family:var(--mono); }
+    /* loading */
+    .load-row td { text-align:center!important; color:var(--tx3); padding:3rem 0; font-family:var(--mono); font-size:12px; }
+    .spin { display:inline-block; width:13px; height:13px; border:2px solid var(--bdr2); border-top-color:var(--blue); border-radius:50%; animation:sp .7s linear infinite; vertical-align:middle; margin-right:7px; }
+    @keyframes sp { to{transform:rotate(360deg)} }
 
     /* news */
     .news-p { background:var(--bg2); border:0.5px solid var(--bdr); border-radius:var(--rl); padding:18px 20px; margin-bottom:36px; }
-    .news-hdr { font-size:13px; font-weight:700; margin-bottom:12px; }
     .ni { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:0.5px solid var(--bdr); flex-wrap:wrap; }
     .ni:last-child { border-bottom:none; }
     .ni-tk { font-weight:700; color:var(--blue); font-family:var(--mono); font-size:13px; min-width:66px; }
@@ -116,8 +101,8 @@
     .btn-sm { margin-left:auto; height:22px; padding:0 10px; background:var(--bg3); border:0.5px solid var(--bdr2); border-radius:5px; color:var(--tx2); font-size:11px; font-family:var(--font); cursor:pointer; flex-shrink:0; }
     .btn-sm:hover { border-color:var(--blue); color:var(--blue); }
 
-    /* seg panel */
-    .seg-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin-bottom:36px; }
+    /* seg */
+    .seg-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:36px; }
     .sc { background:var(--bg2); border:0.5px solid var(--bdr); border-radius:var(--rl); padding:14px 16px; }
     .sc-name { font-size:13px; font-weight:700; margin-bottom:10px; letter-spacing:-.01em; }
     .sc-row { display:flex; justify-content:space-between; font-size:12px; color:var(--tx3); margin-bottom:5px; font-family:var(--mono); }
@@ -125,20 +110,15 @@
     .ib-wrap { height:3px; background:var(--bg3); border-radius:2px; margin-top:8px; overflow:hidden; }
     .ib-fill { height:100%; border-radius:2px; }
 
-    /* loading */
-    .load-row td { text-align:center!important; color:var(--tx3); padding:3rem 0; font-family:var(--mono); font-size:12px; }
-    .spin { display:inline-block; width:13px; height:13px; border:2px solid var(--bdr2); border-top-color:var(--blue); border-radius:50%; animation:sp .7s linear infinite; vertical-align:middle; margin-right:7px; }
-    @keyframes sp{ to{transform:rotate(360deg)} }
-
     /* footer */
-    .foot { margin-top:40px; padding-top:20px; border-top:0.5px solid var(--bdr); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:11px; color:var(--tx3); font-family:var(--mono); }
+    .foot { margin-top:40px; padding-top:20px; border-top:0.5px solid var(--bdr); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:11px; color:var(--tx3); font-family:var(--mono); }
     .foot a { color:var(--blue); text-decoration:none; }
     .foot a:hover { text-decoration:underline; }
 
     /* col widths */
-    .c-tk{width:130px}.c-sg{width:76px}.c-pr{width:78px}.c-vr{width:70px}
-    .c-vp{width:100px}.c-pv{width:96px}.c-dy{width:96px}.c-sp{width:72px}
-    .c-qt{width:76px}.c-vo{width:88px}.c-if{width:74px}
+    .c-tk{width:120px} .c-sg{width:74px} .c-pr{width:80px} .c-vr{width:68px}
+    .c-pv{width:90px}  .c-cx{width:72px} .c-rd{width:108px} .c-sp{width:70px}
+    .c-vd{width:90px}  .c-vm{width:90px} .c-if{width:74px}
 
     @media(max-width:600px){ .shell{padding:0 14px 40px} .hdr h1{font-size:18px} }
   </style>
@@ -154,12 +134,10 @@
     <span class="live load" id="live-dot">CARREGANDO</span>
   </header>
 
-  <!-- Summary -->
   <div class="sec-title">Resumo do dia</div>
   <div class="smry" id="smry"></div>
 
-  <!-- Controls -->
-  <div class="sec-title">Carteira IFIX</div>
+  <div class="sec-title">Carteira IFIX — <span style="font-weight:400;text-transform:none;letter-spacing:0">107 FIIs · Lista oficial B3</span></div>
   <div class="ctrl">
     <input type="text" id="search" placeholder="Buscar ticker ou segmento..." oninput="renderTable()" />
     <select id="fseg" onchange="renderTable()">
@@ -171,14 +149,12 @@
       <option value="HYB">Híbrido / FOF</option>
       <option value="CRI">Papel / CRI</option>
       <option value="HOT">Hotel</option>
-      <option value="EDU">Educacional</option>
     </select>
     <select id="falt" onchange="renderTable()">
       <option value="">Todos</option>
       <option value="up">Maiores altas</option>
       <option value="down">Maiores quedas</option>
       <option value="pvp_low">P/VP &lt; 0,90</option>
-      <option value="dy_hi">DY &gt; 12%</option>
       <option value="ifix_beat">Bate o IFIX hoje</option>
     </select>
     <button class="btn" id="btn-ref" onclick="loadData()">
@@ -189,7 +165,7 @@
 
   <div class="tbl-meta">
     <span id="tbl-count">—</span>
-    <span id="data-ref" style="color:var(--tx3)"></span>
+    <span id="tbl-src" style="font-size:11px"></span>
   </div>
 
   <div class="twrap">
@@ -199,12 +175,12 @@
         <th class="c-sg">Seg.</th>
         <th class="c-pr" onclick="srt('price')">Preço <span id="sa-price">↕</span></th>
         <th class="c-vr" onclick="srt('varPct')">Var.% <span id="sa-varPct">↓</span></th>
-        <th class="c-vp" onclick="srt('vp')">VP/cota <span id="sa-vp">↕</span></th>
         <th class="c-pv" onclick="srt('pvp')">P/VP <span id="sa-pvp">↕</span></th>
-        <th class="c-dy" onclick="srt('dy')">DY ano <span id="sa-dy">↕</span></th>
+        <th class="c-cx" onclick="srt('caixa')">Caixa% <span id="sa-caixa">↕</span></th>
+        <th class="c-rd" onclick="srt('lastRendVal')">Último Rend. <span id="sa-lastRendVal">↕</span></th>
         <th class="c-sp">30d</th>
-        <th class="c-qt" onclick="srt('qtd')">Negócios <span id="sa-qtd">↕</span></th>
-        <th class="c-vo" onclick="srt('vol')">Volume <span id="sa-vol">↕</span></th>
+        <th class="c-vd" onclick="srt('volDia')">Vol. dia <span id="sa-volDia">↕</span></th>
+        <th class="c-vm" onclick="srt('volMes')">Vol. mês <span id="sa-volMes">↕</span></th>
         <th class="c-if" onclick="srt('vsIfix')">vs IFIX <span id="sa-vsIfix">↕</span></th>
       </tr></thead>
       <tbody id="tbody">
@@ -213,31 +189,32 @@
     </table>
   </div>
 
-  <!-- Movers -->
   <div class="sec-title">Movimentos relevantes do dia</div>
-  <div class="news-p">
-    <div id="news-body"><span style="color:var(--tx3);font-size:12px;font-family:var(--mono)">Aguardando dados...</span></div>
-  </div>
+  <div class="news-p"><div id="news-body"><span style="color:var(--tx3);font-size:12px;font-family:var(--mono)">Aguardando...</span></div></div>
 
-  <!-- Seg -->
   <div class="sec-title">Por segmento</div>
-  <div class="seg-grid" id="seg-grid">
-    <span style="color:var(--tx3);font-size:12px;font-family:var(--mono)">Aguardando dados...</span>
-  </div>
+  <div class="seg-grid" id="seg-grid"><span style="color:var(--tx3);font-size:12px;font-family:var(--mono)">Aguardando...</span></div>
 
   <footer class="foot">
-    <span>Cotações: <a href="https://brapi.dev" target="_blank">brapi.dev</a> (~15min delay) · Fundamentais: <a href="https://statusinvest.com.br" target="_blank">Status Invest</a> · Atualizado todo dia útil às 18h via GitHub Actions</span>
-    <span id="foot-updated">—</span>
+    <span>
+      Cotações: <a href="https://finance.yahoo.com" target="_blank">Yahoo Finance</a> (~15min delay) ·
+      Fundamentais: <a href="https://statusinvest.com.br" target="_blank">Status Invest</a> ·
+      Lista: <a href="https://www.b3.com.br" target="_blank">B3 oficial</a> · GitHub Actions atualiza fundamentais todo dia útil às 18h
+    </span>
+    <span id="foot-ts">—</span>
   </footer>
 </div>
 
 <script>
-const BRAPI_TOKEN = 'demo'; // substitua pelo seu token em brapi.dev
+/* ─── CONFIG ──────────────────────────────────────────────────────────── */
+// Yahoo Finance não precisa de token — chamada direta do browser
+const YF_BASE   = 'https://query2.finance.yahoo.com/v8/finance/chart/';
+const YF_BASE2  = 'https://query1.finance.yahoo.com/v8/finance/chart/';
+// Status Invest API interna (usada pelo próprio site)
+const SI_BASE   = 'https://statusinvest.com.br/fii/';
 
-// Lista completa atual do IFIX (atualizada em junho/2025)
-// O script fetch_fiis.py mantém essa lista dinâmica no fiis.json
+/* ─── LISTA IFIX — B3 OFICIAL ─────────────────────────────────────────── */
 const IFIX_TICKERS = [
-  // Lista oficial B3 — 107 FIIs (junho/2025)
   ['CACR11','CRI'],['AFHI11','CRI'],['ALZR11','LOG'],['RZAT11','CRI'],
   ['FATN11','LOG'],['AZPL11','CRI'],['BBIG11','LJ'], ['BRCR11','LJ'],
   ['BCIA11','LOG'],['BCRI11','CRI'],['BRCO11','LOG'],['BROF11','LJ'],
@@ -267,260 +244,415 @@ const IFIX_TICKERS = [
   ['XPLG11','LOG'],['XPML11','SHO'],['XPSF11','CRI'],
 ];
 
-const SEGL = { LJ:'Lajes',LOG:'Logística',SHO:'Shopping',RES:'Residencial',HYB:'Híbrido',CRI:'Papel',HOT:'Hotel',EDU:'Educacional' };
-const SEG_COLORS = { LJ:'#4d9de0',LOG:'#1fcf8a',SHO:'#f0b840',RES:'#a47fe0',HYB:'#8b90a0',CRI:'#f06aaa',HOT:'#f0614a',EDU:'#63c45a' };
+const SEGL = { LJ:'Lajes',LOG:'Logística',SHO:'Shopping',RES:'Residencial',HYB:'Híbrido',CRI:'Papel',HOT:'Hotel' };
+const SEG_COLORS = { LJ:'#4d9de0',LOG:'#1fcf8a',SHO:'#f0b840',RES:'#a47fe0',HYB:'#8b90a0',CRI:'#f06aaa',HOT:'#f0614a' };
 
+/* ─── STATE ───────────────────────────────────────────────────────────── */
 let allData = [], fundData = {}, sparkCache = {};
-let sortCol = 'varPct', sortDir = -1;
-let ifixVar = 0;
+let sortCol = 'varPct', sortDir = -1, ifixVar = 0;
 
-/* ── formatters ─────────────────────────────────────────── */
-const fBRL = v => v!=null&&!isNaN(v) ? 'R$\u00a0'+v.toFixed(2).replace('.',',') : '—';
-const fVol = v => { if(!v)return'—'; if(v>=1e6)return'R$\u00a0'+(v/1e6).toFixed(1).replace('.',',')+'M'; if(v>=1e3)return'R$\u00a0'+(v/1e3).toFixed(0)+'k'; return'R$\u00a0'+v.toFixed(0); };
-const fPct = v => v!=null&&!isNaN(v) ? (v>=0?'+':'')+v.toFixed(2).replace('.',',')+'%' : '—';
-const fN   = v => v ? v.toLocaleString('pt-BR') : '—';
+/* ─── FORMATTERS ──────────────────────────────────────────────────────── */
+const fBRL  = v => v != null && !isNaN(v) ? 'R$\u00a0' + v.toFixed(2).replace('.',',') : '—';
+const fPct  = v => v != null && !isNaN(v) ? (v>=0?'+':'')+v.toFixed(2).replace('.',',')+'%' : '—';
+const fVolR = v => {
+  if (!v || v <= 0) return '—';
+  if (v >= 1e9) return 'R$\u00a0'+(v/1e9).toFixed(2).replace('.',',')+'B';
+  if (v >= 1e6) return 'R$\u00a0'+(v/1e6).toFixed(1).replace('.',',')+'M';
+  if (v >= 1e3) return 'R$\u00a0'+(v/1e3).toFixed(0)+'k';
+  return 'R$\u00a0'+v.toFixed(0);
+};
+// Yahoo retorna volume em cotas — converter para R$ multiplicando pelo preço
+const volToReais = (volCotas, price) => (volCotas && price) ? volCotas * price : null;
 
-/* ── mocks (fallback se API falhar) ─────────────────────── */
-const mP  = t => ({KNRI11:148,HGLG11:162,XPLG11:105,VISC11:99,HSML11:89,GGRC11:115,BRCO11:108,BTLG11:104,MXRF11:9.8,KNCR11:98,CPTS11:8.7,XPML11:113,MALL11:107,HGBS11:190}[t]||(80+(t.charCodeAt(0)%12)*10+(t.charCodeAt(2)%7)*5));
-const mV  = t => { const s=(t.charCodeAt(0)*13+t.charCodeAt(2)*7)%200; return(s-100)/55; };
-const mVl = t => ((t.charCodeAt(0)*17+t.charCodeAt(2)*11)%1000+200)*1000;
-const mQ  = t => ((t.charCodeAt(0)*7+t.charCodeAt(3)*5)%500+50)*10;
-const mSp = (t,p) => { const seed=t.charCodeAt(0)*7+t.charCodeAt(2)*3; const pts=[]; let v=p*(0.97+(seed%6)/100); for(let i=0;i<30;i++){v+=(Math.sin(i*.4+seed)*.008+(Math.random()-.48)*.012)*v;pts.push(+v.toFixed(2));} pts[29]=p; return pts; };
+/* ─── YAHOO FINANCE ───────────────────────────────────────────────────── */
+async function fetchYahoo(ticker) {
+  // tenta query2 primeiro, fallback query1
+  for (const base of [YF_BASE, YF_BASE2]) {
+    try {
+      const url = `${base}${ticker}.SA?interval=1d&range=1mo&includePrePost=false`;
+      const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      if (!r.ok) continue;
+      const j = await r.json();
+      const result = j?.chart?.result?.[0];
+      if (!result) continue;
 
-/* ── fetch fundamentais do repo ─────────────────────────── */
+      const meta      = result.meta;
+      const price     = meta.regularMarketPrice;
+      const prevClose = meta.chartPreviousClose ?? meta.previousClose;
+      const varPct    = (price && prevClose) ? (price - prevClose) / prevClose * 100 : null;
+      const volDiaCotas = meta.regularMarketVolume ?? 0;
+      const volDia    = volToReais(volDiaCotas, price);
+
+      // histórico 30d — timestamps + closes
+      const closes    = result.indicators?.quote?.[0]?.close ?? [];
+      const volumes   = result.indicators?.quote?.[0]?.volume ?? [];
+      const spark     = closes.filter(Boolean).slice(-30);
+
+      // volume do mês: soma de todos os dias do histórico × preço médio
+      const volMesCotas = volumes.filter(Boolean).reduce((a,b) => a+b, 0);
+      const avgPrice    = closes.filter(Boolean).reduce((a,b)=>a+b,0) / (closes.filter(Boolean).length||1);
+      const volMes      = volToReais(volMesCotas, avgPrice);
+
+      return { price, prevClose, varPct, volDia, volMes, spark };
+    } catch (e) {
+      continue;
+    }
+  }
+  return null;
+}
+
+/* ─── STATUS INVEST API ───────────────────────────────────────────────── */
+// O Status Invest expõe um endpoint JSON usado pelo próprio site
+// GET /fii/tickerprice?ticker=HSAF11&type=4  → retorna dados de mercado + fundamentais
+async function fetchStatusInvest(ticker) {
+  try {
+    // Endpoint principal — dados gerais do FII
+    const url = `https://statusinvest.com.br/fii/tickerprice?ticker=${ticker}&type=4`;
+    const r = await fetch(url, {
+      headers: {
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'Referer': `https://statusinvest.com.br/fundos-imobiliarios/${ticker.toLowerCase()}`,
+        'X-Requested-With': 'XMLHttpRequest',
+      }
+    });
+    if (!r.ok) return null;
+    const j = await r.json();
+
+    // O retorno varia — mapear campos conhecidos
+    // P/VP: campo "p_vp" ou "pvp"
+    // Caixa: campo "ativo_cixa_porcent" ou similar
+    // Último rendimento: campo "dy" ou "last_dividend"
+    const pvp       = j?.p_vp    ?? j?.pvp    ?? null;
+    const caixa     = j?.ativo_caixa_porcent ?? j?.caixa_porcent ?? null;
+    const lastRend  = j?.dy      ?? j?.last_dividend ?? null;
+    const lastDate  = j?.last_dividend_date ?? j?.dy_date ?? null;
+
+    return { pvp, caixa, lastRend, lastDate };
+  } catch { return null; }
+}
+
+// Fallback: scrape da página HTML do Status Invest
+async function fetchSIPage(ticker) {
+  try {
+    const url = `https://statusinvest.com.br/fundos-imobiliarios/${ticker.toLowerCase()}`;
+    const r = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36',
+        'Accept-Language': 'pt-BR,pt;q=0.9',
+        'Referer': 'https://statusinvest.com.br/fundos-imobiliarios',
+      }
+    });
+    if (!r.ok) return null;
+    const html = await r.text();
+    const parse = (pattern) => { const m = html.match(pattern); return m ? m[1] : null; };
+
+    // P/VP — aparece como "0,90" ou "0.90"
+    const pvpRaw  = parse(/[Pp]\s*\/\s*[Vv][Pp][^>]*>[\s]*([0-9]+[.,][0-9]+)/);
+    const pvp     = pvpRaw ? parseFloat(pvpRaw.replace(',','.')) : null;
+
+    // Caixa — "X,XX%" próximo de "caixa" ou "liquidez"
+    const caixaRaw = parse(/[Cc]aixa[^>]*>[\s\S]{0,200}?([0-9]+[.,][0-9]+)\s*%/);
+    const caixa    = caixaRaw ? parseFloat(caixaRaw.replace(',','.')) : null;
+
+    // Último rendimento — "R$ X,XX" + data
+    const rendRaw  = parse(/[Úú]ltimo\s+[Rr]endimento[^>]*>[\s\S]{0,300}?R\$\s*([0-9]+[.,][0-9]+)/);
+    const lastRend = rendRaw ? parseFloat(rendRaw.replace(',','.')) : null;
+    const dateRaw  = parse(/([0-9]{2}\/[0-9]{2}\/[0-9]{2,4})/);
+    const lastDate = dateRaw ?? null;
+
+    return { pvp, caixa, lastRend, lastDate };
+  } catch { return null; }
+}
+
+/* ─── LOAD FIIS.JSON (fundamentais do repo) ───────────────────────────── */
 async function loadFundamentals() {
   try {
-    const r = await fetch('data/fiis.json?_='+Date.now());
-    if(!r.ok) return;
+    const r = await fetch('data/fiis.json?_=' + Date.now());
+    if (!r.ok) return;
     fundData = await r.json();
     const m = fundData._meta;
-    if(m) {
-      document.getElementById('foot-updated').textContent =
-        'fiis.json: '+m.updated+(m.refMonth?' (ref. '+m.refMonth+')':'');
-    }
-    // se o JSON tiver lista de tickers, usar ela (atualizada pelo Actions)
-    // caso contrário mantém IFIX_TICKERS hardcoded
+    if (m) document.getElementById('foot-ts').textContent =
+      'fiis.json: ' + m.updated + (m.refMonth ? ' (ref. ' + m.refMonth + ')' : '');
   } catch(e) { console.warn('fiis.json:', e.message); }
 }
 
-/* ── fetch cotação ──────────────────────────────────────── */
-async function fetchBrapi(ticker) {
-  try {
-    const r = await fetch(`https://brapi.dev/api/quote/${ticker}?token=${BRAPI_TOKEN}`);
-    if(!r.ok) return null;
-    const q = (await r.json())?.results?.[0];
-    if(!q) return null;
-    return { price:q.regularMarketPrice, varPct:q.regularMarketChangePercent, vol:q.regularMarketVolume };
-  } catch { return null; }
-}
-
-/* ── fetch histórico 30d ────────────────────────────────── */
-async function fetchHistory(ticker) {
-  if(sparkCache[ticker]) return sparkCache[ticker];
-  try {
-    const r = await fetch(`https://brapi.dev/api/quote/${ticker}?range=1mo&interval=1d&token=${BRAPI_TOKEN}`);
-    if(!r.ok) return null;
-    const hist = (await r.json())?.results?.[0]?.historicalDataPrice;
-    if(!hist||hist.length<5) return null;
-    const pts = hist.map(h=>h.close).filter(Boolean);
-    sparkCache[ticker] = pts;
-    return pts;
-  } catch { return null; }
-}
-
-/* ── load principal ─────────────────────────────────────── */
+/* ─── MAIN LOAD ───────────────────────────────────────────────────────── */
 async function loadData() {
   document.getElementById('btn-ref').disabled = true;
   const dot = document.getElementById('live-dot');
-  dot.textContent='ATUALIZANDO'; dot.className='live load';
-  document.getElementById('tbody').innerHTML = '<tr class="load-row"><td colspan="11"><span class="spin"></span>Buscando cotações...</td></tr>';
+  dot.textContent = 'ATUALIZANDO'; dot.className = 'live load';
+  document.getElementById('tbody').innerHTML =
+    '<tr class="load-row"><td colspan="11"><span class="spin"></span>Buscando cotações via Yahoo Finance...</td></tr>';
 
   await loadFundamentals();
 
-  // usa lista do fiis.json se disponível (mantida pelo Actions), senão usa hardcoded
-  const tickerList = IFIX_TICKERS;
+  // Busca em paralelo: Yahoo Finance para todos os tickers
+  // Status Invest: usa dados do fiis.json (atualizados pelo Actions)
+  // e tenta buscar ao vivo para os primeiros 20 (rate limit)
+  const yResults = await Promise.all(
+    IFIX_TICKERS.map(async ([tk, sgFallback]) => {
+      const yf = await fetchYahoo(tk);
+      const fd = fundData[tk] || {};
+      const seg = fd.seg || sgFallback;
 
-  const results = await Promise.all(tickerList.map(async ([tk, sgFallback]) => {
-    const d  = await fetchBrapi(tk);
-    const fd = fundData[tk] || {};
-    const price  = d?.price   ?? mP(tk);
-    const varPct = d?.varPct  ?? mV(tk);
-    const vol    = d?.vol     ?? mVl(tk);
-    const qtd    = mQ(tk);
-    const seg    = fd.seg     || sgFallback;
-    const vp     = fd.vp     ?? null;
-    const pvp    = vp ? price/vp : null;
-    const dy     = fd.dy     ?? null;
-    const vpMonth = fd.vpMonth ?? null;
-    const dyMonth = fd.dyMonth ?? null;
-    const lastDiv = fd.lastDiv ?? null;
-    const divDate = fd.divDate ?? null;
-    let spark = sparkCache[tk];
-    if(!spark){ spark = await fetchHistory(tk); if(!spark) spark=mSp(tk,price); sparkCache[tk]=spark; }
-    return { ticker:tk, seg, price, varPct, vol, qtd, vp, pvp, dy, vpMonth, dyMonth, lastDiv, divDate, spark };
+      // P/VP e fundamentais: usa fiis.json (Actions atualiza) ou tenta SI ao vivo
+      let pvp      = fd.pvp_live   ?? fd.pvpRef ?? null;
+      let caixa    = fd.caixa      ?? null;
+      let lastRend = fd.lastRend   ?? fd.lastDiv ?? null;
+      let lastDate = fd.lastRendDate ?? fd.divDate ?? null;
+
+      const price   = yf?.price    ?? null;
+      const varPct  = yf?.varPct   ?? null;
+      const volDia  = yf?.volDia   ?? null;
+      const volMes  = yf?.volMes   ?? null;
+      const spark   = yf?.spark    ?? (sparkCache[tk] || []);
+      if (spark.length) sparkCache[tk] = spark;
+
+      // P/VP ao vivo: se temos preço do YF e VP do fiis.json, calcular
+      const vpCota = fd.vp ?? null;
+      if (price && vpCota) pvp = price / vpCota;
+
+      return { ticker:tk, seg, price, varPct, volDia, volMes, spark,
+               pvp, caixa, lastRend, lastDate };
+    })
+  );
+
+  allData = yResults;
+
+  // IFIX estimado = média ponderada das variações (simplificado: média simples)
+  const withVar = allData.filter(d => d.varPct != null);
+  ifixVar = withVar.length
+    ? withVar.reduce((a,d) => a + d.varPct, 0) / withVar.length
+    : 0;
+  allData = allData.map(d => ({
+    ...d,
+    vsIfix: d.varPct != null ? d.varPct - ifixVar : null
   }));
 
-  allData = results;
-  ifixVar = allData.reduce((a,d)=>a+d.varPct,0)/allData.length;
-  allData = allData.map(d=>({...d, vsIfix:d.varPct-ifixVar}));
+  const now = new Date().toLocaleTimeString('pt-BR');
+  const hasYF = allData.filter(d => d.price).length;
+  document.getElementById('ts').textContent =
+    `Atualizado às ${now} · ${hasYF}/${IFIX_TICKERS.length} cotações via Yahoo Finance · ~15min delay · atualiza a cada 5min`;
+  document.getElementById('tbl-src').textContent =
+    `YF: cotação/volume/30d · SI: P/VP, caixa%, último rendimento`;
 
   renderSummary();
   renderTable();
   renderNews();
   renderSeg();
 
-  const now = new Date().toLocaleTimeString('pt-BR');
-  document.getElementById('ts').textContent = 'Atualizado às '+now+' · atraso ~15min · atualiza a cada 5min';
-  dot.textContent='AO VIVO'; dot.className='live ok';
+  dot.textContent = hasYF > 50 ? 'AO VIVO' : hasYF > 0 ? 'PARCIAL' : 'OFFLINE';
+  dot.className   = hasYF > 50 ? 'live ok' : hasYF > 0 ? 'live load' : 'live err';
   document.getElementById('btn-ref').disabled = false;
 }
 
-/* ── sparkline ──────────────────────────────────────────── */
+/* ─── SPARKLINE ───────────────────────────────────────────────────────── */
 function drawSpark(id, data) {
+  if (!data || data.length < 2) return;
   const el = document.getElementById(id);
-  if(!el) return;
+  if (!el) return;
   const ctx = el.getContext('2d');
-  const w=el.width, h=el.height;
+  const w = el.width, h = el.height;
   ctx.clearRect(0,0,w,h);
-  const mn=Math.min(...data), mx=Math.max(...data), rng=mx-mn||1;
+  const mn = Math.min(...data), mx = Math.max(...data), rng = mx - mn || 1;
   ctx.beginPath();
-  ctx.strokeStyle = data[data.length-1]>=data[0] ? '#1fcf8a' : '#f0614a';
-  ctx.lineWidth=1.5;
-  data.forEach((v,i)=>{ const x=(i/(data.length-1))*w, y=h-((v-mn)/rng)*(h-2)-1; i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+  ctx.strokeStyle = data[data.length-1] >= data[0] ? '#1fcf8a' : '#f0614a';
+  ctx.lineWidth = 1.5;
+  data.forEach((v,i) => {
+    const x = (i/(data.length-1))*w;
+    const y = h - ((v-mn)/rng)*(h-2) - 1;
+    i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  });
   ctx.stroke();
 }
 
-/* ── summary ────────────────────────────────────────────── */
+/* ─── SUMMARY ─────────────────────────────────────────────────────────── */
 function renderSummary() {
-  const n=allData.length, up=allData.filter(d=>d.varPct>0).length, dn=allData.filter(d=>d.varPct<0).length;
-  const vol=allData.reduce((a,d)=>a+(d.vol||0),0);
-  const pvpA=allData.filter(d=>d.pvp).map(d=>d.pvp);
-  const dyA=allData.filter(d=>d.dy).map(d=>d.dy);
-  const varA=allData.map(d=>d.varPct);
-  const avg=arr=>arr.reduce((a,b)=>a+b,0)/arr.length;
-  const ap=pvpA.length?avg(pvpA):null, ad=dyA.length?avg(dyA):null, av=varA.length?avg(varA):null;
-  const vc=av>0?'up':av<0?'dn':'';
-  document.getElementById('smry').innerHTML=`
-    <div class="mc"><div class="mc-l">Total FIIs</div><div class="mc-v">${n}</div><div class="mc-s">no IFIX</div></div>
+  const n   = allData.length;
+  const up  = allData.filter(d => d.varPct > 0).length;
+  const dn  = allData.filter(d => d.varPct < 0).length;
+  const volD = allData.reduce((a,d) => a+(d.volDia||0), 0);
+  const pvpA = allData.filter(d => d.pvp).map(d => d.pvp);
+  const varA = allData.filter(d => d.varPct != null).map(d => d.varPct);
+  const avg  = arr => arr.reduce((a,b)=>a+b,0)/arr.length;
+  const ap   = pvpA.length ? avg(pvpA) : null;
+  const av   = varA.length ? avg(varA) : null;
+  const vc   = av > 0 ? 'up' : av < 0 ? 'dn' : '';
+
+  document.getElementById('smry').innerHTML = `
+    <div class="mc"><div class="mc-l">Total FIIs</div><div class="mc-v">${n}</div><div class="mc-s">IFIX B3 oficial</div></div>
     <div class="mc"><div class="mc-l">Subindo</div><div class="mc-v up">${up}</div><div class="mc-s">hoje</div></div>
     <div class="mc"><div class="mc-l">Caindo</div><div class="mc-v dn">${dn}</div><div class="mc-s">hoje</div></div>
-    <div class="mc"><div class="mc-l">Volume total</div><div class="mc-v">${fVol(vol)}</div><div class="mc-s">acumulado hoje</div></div>
-    <div class="mc"><div class="mc-l">P/VP médio</div><div class="mc-v">${ap?ap.toFixed(2):'—'}</div><div class="mc-s">carteira IFIX</div></div>
-    <div class="mc"><div class="mc-l">DY médio</div><div class="mc-v gold">${ad?ad.toFixed(1)+'%':'—'}</div><div class="mc-s">anualizado</div></div>
-    <div class="mc"><div class="mc-l">IFIX est.</div><div class="mc-v ${vc}">${fPct(av)}</div><div class="mc-s">variação média</div></div>
+    <div class="mc"><div class="mc-l">Volume total dia</div><div class="mc-v">${fVolR(volD)}</div><div class="mc-s">acumulado hoje</div></div>
+    <div class="mc"><div class="mc-l">P/VP médio</div><div class="mc-v">${ap ? ap.toFixed(2) : '—'}</div><div class="mc-s">carteira IFIX</div></div>
+    <div class="mc"><div class="mc-l">IFIX est.</div><div class="mc-v ${vc}">${fPct(av)}</div><div class="mc-s">var. média pond.</div></div>
   `;
 }
 
-/* ── tabela ─────────────────────────────────────────────── */
+/* ─── TABLE ───────────────────────────────────────────────────────────── */
 function getFiltered() {
-  const q=document.getElementById('search').value.toLowerCase();
-  const sg=document.getElementById('fseg').value;
-  const alt=document.getElementById('falt').value;
-  return allData.filter(d=>{
-    if(q&&!d.ticker.toLowerCase().includes(q)&&!(SEGL[d.seg]||'').toLowerCase().includes(q))return false;
-    if(sg&&d.seg!==sg)return false;
-    if(alt==='up'&&d.varPct<1.5)return false;
-    if(alt==='down'&&d.varPct>-1.5)return false;
-    if(alt==='pvp_low'&&(d.pvp==null||d.pvp>=0.90))return false;
-    if(alt==='dy_hi'&&(d.dy==null||d.dy<12))return false;
-    if(alt==='ifix_beat'&&d.vsIfix<=0)return false;
+  const q   = document.getElementById('search').value.toLowerCase();
+  const sg  = document.getElementById('fseg').value;
+  const alt = document.getElementById('falt').value;
+  return allData.filter(d => {
+    if (q && !d.ticker.toLowerCase().includes(q) && !(SEGL[d.seg]||'').toLowerCase().includes(q)) return false;
+    if (sg && d.seg !== sg) return false;
+    if (alt === 'up'       && (d.varPct == null || d.varPct < 1.5))  return false;
+    if (alt === 'down'     && (d.varPct == null || d.varPct > -1.5)) return false;
+    if (alt === 'pvp_low'  && (d.pvp == null || d.pvp >= 0.90))      return false;
+    if (alt === 'ifix_beat' && (d.vsIfix == null || d.vsIfix <= 0))  return false;
     return true;
   });
 }
 
 function getSorted(data) {
-  return [...data].sort((a,b)=>{ let va=a[sortCol],vb=b[sortCol]; if(va==null)return 1; if(vb==null)return -1; return typeof va==='string'?sortDir*va.localeCompare(vb):sortDir*(va-vb); });
+  return [...data].sort((a,b) => {
+    let va = a[sortCol], vb = b[sortCol];
+    if (va == null) return 1; if (vb == null) return -1;
+    return typeof va === 'string'
+      ? sortDir * va.localeCompare(vb)
+      : sortDir * (va - vb);
+  });
 }
 
 function renderTable() {
   const rows = getSorted(getFiltered());
-  document.getElementById('tbl-count').textContent = rows.length + ' FIIs' + (rows.length < allData.length ? ' (filtrado)' : '');
+  document.getElementById('tbl-count').textContent =
+    rows.length + ' FIIs' + (rows.length < allData.length ? ' (filtrado de ' + allData.length + ')' : '');
 
   const tbody = document.getElementById('tbody');
-  if(!rows.length){ tbody.innerHTML='<tr class="load-row"><td colspan="11">Nenhum FII com esses filtros.</td></tr>'; return; }
+  if (!rows.length) {
+    tbody.innerHTML = '<tr class="load-row"><td colspan="11">Nenhum FII com esses filtros.</td></tr>';
+    return;
+  }
 
-  tbody.innerHTML = rows.map(d=>{
-    const alert=Math.abs(d.varPct)>=2.5;
-    const vc=d.varPct>0?'up':d.varPct<0?'dn':'neutral';
-    const vic=d.vsIfix>0?'up':d.vsIfix<0?'dn':'neutral';
-    const pvpC=d.pvp==null?'#8b90a0':d.pvp<0.9?'#1fcf8a':d.pvp>1.1?'#f0614a':'#8b90a0';
-    const pvpW=d.pvp?Math.min(d.pvp*32,46):0;
-    const dyC=d.dy>=12?'dy-hi':d.dy>=9?'dy-mid':'dy-lo';
-    const ai=alert?(d.varPct>0?'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1fcf8a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>':'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#f0614a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>'):'';
-    // ref badges para VP e DY
-    const vpRef = d.vpMonth ? `<span class="ref-badge">${d.vpMonth}</span>` : '';
-    const dyRef = d.dyMonth ? `<span class="ref-badge">${d.dyMonth}</span>` : '';
-    const vpTip = d.vpMonth ? `VP referente a ${d.vpMonth}` : '';
-    const dyTip = d.dyMonth ? `DY referente a ${d.dyMonth}` : '';
-    return `<tr class="${alert?'alert-row':''}"
-      title="Último div: ${d.lastDiv?'R$'+d.lastDiv.toFixed(4)+' em '+(d.divDate||'—'):'—'}"
-      ondblclick="investigar('${d.ticker}','${fPct(d.varPct)}','${d.pvp?.toFixed(2)||'—'}','${d.dy?.toFixed(1)||'—'}')">
-      <td class="c-tk"><div class="tk-w"><span class="seg-dot" style="background:${SEG_COLORS[d.seg]||'#8b90a0'}"></span>${d.ticker}${ai?'&nbsp;'+ai:''}</div></td>
+  tbody.innerHTML = rows.map(d => {
+    const alert  = d.varPct != null && Math.abs(d.varPct) >= 2.5;
+    const vc     = d.varPct  > 0 ? 'up' : d.varPct  < 0 ? 'dn' : 'neutral';
+    const vic    = d.vsIfix  > 0 ? 'up' : d.vsIfix  < 0 ? 'dn' : 'neutral';
+    const pvpC   = d.pvp == null ? '#8b90a0' : d.pvp < 0.9 ? '#1fcf8a' : d.pvp > 1.1 ? '#f0614a' : '#8b90a0';
+    const pvpW   = d.pvp ? Math.min(d.pvp * 32, 46) : 0;
+    const cxCls  = d.caixa != null && d.caixa > 5 ? 'caixa-hi' : '';
+
+    // Último rendimento: valor + data
+    const rendCell = d.lastRend != null
+      ? `<span class="rend-val">${fBRL(d.lastRend)}</span>${d.lastDate ? '<span class="rend-date">' + d.lastDate + '</span>' : ''}`
+      : '—';
+
+    // ícone de alerta
+    const ai = alert
+      ? (d.varPct > 0
+        ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1fcf8a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>'
+        : '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#f0614a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>')
+      : '';
+
+    return `<tr class="${alert ? 'alert-row' : ''}"
+      ondblclick="investigar('${d.ticker}','${fPct(d.varPct)}','${d.pvp?.toFixed(2)||'—'}','${d.caixa?.toFixed(1)||'—'}','${d.lastRend?.toFixed(4)||'—'}')">
+      <td class="c-tk"><div class="tk-w">
+        <span class="seg-dot" style="background:${SEG_COLORS[d.seg]||'#8b90a0'}"></span>
+        ${d.ticker}${ai ? '&nbsp;' + ai : ''}
+      </div></td>
       <td class="c-sg"><span class="seg-lbl">${SEGL[d.seg]||d.seg}</span></td>
       <td class="c-pr">${fBRL(d.price)}</td>
       <td class="c-vr"><span class="${vc}">${fPct(d.varPct)}</span></td>
-      <td class="c-vp" title="${vpTip}">${d.vp?fBRL(d.vp)+''+vpRef:'—'}</td>
-      <td class="c-pv"><div class="pvp-w"><span style="color:${pvpC};font-weight:500">${d.pvp?d.pvp.toFixed(2):'—'}</span><span class="pvp-bar"><span class="pvp-fill" style="width:${pvpW}px;background:${pvpC}"></span></span></div></td>
-      <td class="c-dy" title="${dyTip}"><span class="dy-p ${dyC}">${d.dy?d.dy.toFixed(1)+'%':'—'}</span>${dyRef}</td>
-      <td class="c-sp"><canvas class="spark" id="sp-${d.ticker}" width="60" height="22"></canvas></td>
-      <td class="c-qt">${fN(d.qtd)}</td>
-      <td class="c-vo">${fVol(d.vol)}</td>
+      <td class="c-pv">
+        <div class="pvp-w">
+          <span style="color:${pvpC};font-weight:500">${d.pvp ? d.pvp.toFixed(2) : '—'}</span>
+          <span class="pvp-bar"><span class="pvp-fill" style="width:${pvpW}px;background:${pvpC}"></span></span>
+        </div>
+      </td>
+      <td class="c-cx"><span class="caixa-pill ${cxCls}">${d.caixa != null ? d.caixa.toFixed(1)+'%' : '—'}</span></td>
+      <td class="c-rd">${rendCell}</td>
+      <td class="c-sp"><canvas class="spark" id="sp-${d.ticker}" width="60" height="22"
+        aria-label="Sparkline 30 dias ${d.ticker}"></canvas></td>
+      <td class="c-vd">${fVolR(d.volDia)}</td>
+      <td class="c-vm">${fVolR(d.volMes)}</td>
       <td class="c-if"><span class="${vic}">${fPct(d.vsIfix)}</span></td>
     </tr>`;
   }).join('');
 
-  setTimeout(()=>rows.forEach(d=>drawSpark('sp-'+d.ticker,d.spark)),50);
+  setTimeout(() => rows.forEach(d => drawSpark('sp-'+d.ticker, d.spark)), 50);
 }
 
-/* ── movers ─────────────────────────────────────────────── */
+/* ─── MOVERS ──────────────────────────────────────────────────────────── */
 function renderNews() {
-  const movers=[...allData].sort((a,b)=>Math.abs(b.varPct)-Math.abs(a.varPct)).slice(0,8);
-  document.getElementById('news-body').innerHTML=movers.map(d=>{
-    const vc=d.varPct>0?'up':'dn';
+  const movers = [...allData]
+    .filter(d => d.varPct != null)
+    .sort((a,b) => Math.abs(b.varPct) - Math.abs(a.varPct))
+    .slice(0, 8);
+
+  document.getElementById('news-body').innerHTML = movers.map(d => {
+    const vc = d.varPct > 0 ? 'up' : 'dn';
     return `<div class="ni">
       <span class="ni-tk">${d.ticker}</span>
       <span class="${vc}" style="font-weight:700;font-family:var(--mono)">${fPct(d.varPct)}</span>
-      <span class="ni-m">DY ${d.dy?d.dy.toFixed(1)+'%':'—'}${d.dyMonth?' ('+d.dyMonth+')':''} · P/VP ${d.pvp?d.pvp.toFixed(2):'—'} · vs IFIX ${fPct(d.vsIfix)} · último div ${d.lastDiv?'R$'+d.lastDiv.toFixed(4):'—'}</span>
-      <button class="btn-sm" onclick="investigar('${d.ticker}','${fPct(d.varPct)}','${d.pvp?.toFixed(2)||'—'}','${d.dy?.toFixed(1)||'—'}')">Investigar →</button>
+      <span class="ni-m">
+        P/VP ${d.pvp ? d.pvp.toFixed(2) : '—'} ·
+        Caixa ${d.caixa != null ? d.caixa.toFixed(1)+'%' : '—'} ·
+        Último rend. ${d.lastRend ? fBRL(d.lastRend) : '—'}${d.lastDate ? ' ('+d.lastDate+')' : ''} ·
+        vs IFIX ${fPct(d.vsIfix)}
+      </span>
+      <button class="btn-sm"
+        onclick="investigar('${d.ticker}','${fPct(d.varPct)}','${d.pvp?.toFixed(2)||'—'}','${d.caixa?.toFixed(1)||'—'}','${d.lastRend?.toFixed(4)||'—'}')">
+        Investigar →
+      </button>
     </div>`;
   }).join('');
 }
 
-/* ── por segmento ───────────────────────────────────────── */
+/* ─── POR SEGMENTO ────────────────────────────────────────────────────── */
 function renderSeg() {
-  const segs={};
-  allData.forEach(d=>{ if(!segs[d.seg])segs[d.seg]={n:0,vs:0,ds:0,ps:0,pn:0,vol:0}; segs[d.seg].n++; segs[d.seg].vs+=d.varPct; if(d.dy)segs[d.seg].ds+=d.dy; if(d.pvp){segs[d.seg].ps+=d.pvp;segs[d.seg].pn++;} segs[d.seg].vol+=d.vol||0; });
-  document.getElementById('seg-grid').innerHTML=Object.entries(segs).map(([sg,s])=>{
-    const av=s.vs/s.n, ad=s.ds/s.n, ap=s.pn?s.ps/s.pn:null, vi=av-ifixVar;
-    const vc=av>0?'up':av<0?'dn':'neutral', bC=vi>=0?'#1fcf8a':'#f0614a', bW=Math.min(Math.abs(vi)*18,100);
+  const segs = {};
+  allData.forEach(d => {
+    if (!segs[d.seg]) segs[d.seg] = { n:0, vs:0, vn:0, ps:0, pn:0, vd:0, vm:0 };
+    segs[d.seg].n++;
+    if (d.varPct != null) { segs[d.seg].vs += d.varPct; segs[d.seg].vn++; }
+    if (d.pvp)    { segs[d.seg].ps += d.pvp; segs[d.seg].pn++; }
+    segs[d.seg].vd += d.volDia || 0;
+    segs[d.seg].vm += d.volMes || 0;
+  });
+
+  document.getElementById('seg-grid').innerHTML = Object.entries(segs).map(([sg,s]) => {
+    const av  = s.vn ? s.vs/s.vn : null;
+    const ap  = s.pn ? s.ps/s.pn : null;
+    const vi  = av != null ? av - ifixVar : null;
+    const vc  = av > 0 ? 'up' : av < 0 ? 'dn' : 'neutral';
+    const bC  = vi >= 0 ? '#1fcf8a' : '#f0614a';
+    const bW  = vi != null ? Math.min(Math.abs(vi) * 18, 100) : 0;
     return `<div class="sc">
-      <div class="sc-name" style="color:${SEG_COLORS[sg]||'#8b90a0'}">${SEGL[sg]||sg} <span style="font-size:11px;color:var(--tx3);font-weight:400">(${s.n})</span></div>
-      <div class="sc-row"><span>Var. média</span><span class="${vc}">${fPct(av)}</span></div>
-      <div class="sc-row"><span>vs IFIX</span><span style="color:${bC}">${fPct(vi)}</span></div>
-      <div class="sc-row"><span>DY médio</span><span>${ad?ad.toFixed(1)+'%':'—'}</span></div>
+      <div class="sc-name" style="color:${SEG_COLORS[sg]||'#8b90a0'}">
+        ${SEGL[sg]||sg}
+        <span style="font-size:11px;color:var(--tx3);font-weight:400">(${s.n})</span>
+      </div>
+      <div class="sc-row"><span>Var. média</span><span class="${vc}">${av!=null?fPct(av):'—'}</span></div>
+      <div class="sc-row"><span>vs IFIX</span><span style="color:${bC}">${vi!=null?fPct(vi):'—'}</span></div>
       <div class="sc-row"><span>P/VP médio</span><span>${ap?ap.toFixed(2):'—'}</span></div>
-      <div class="sc-row"><span>Volume</span><span>${fVol(s.vol)}</span></div>
+      <div class="sc-row"><span>Vol. dia</span><span>${fVolR(s.vd)}</span></div>
+      <div class="sc-row"><span>Vol. mês</span><span>${fVolR(s.vm)}</span></div>
       <div class="ib-wrap"><div class="ib-fill" style="width:${bW}%;background:${bC}"></div></div>
     </div>`;
   }).join('');
 }
 
-/* ── sort ───────────────────────────────────────────────── */
+/* ─── SORT ────────────────────────────────────────────────────────────── */
 function srt(col) {
-  if(sortCol===col)sortDir*=-1; else{sortCol=col;sortDir=-1;}
-  document.querySelectorAll('[id^="sa-"]').forEach(el=>el.textContent='↕');
-  const el=document.getElementById('sa-'+col); if(el)el.textContent=sortDir===-1?'↓':'↑';
+  if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = -1; }
+  document.querySelectorAll('[id^="sa-"]').forEach(el => el.textContent = '↕');
+  document.querySelectorAll('thead th').forEach(th => th.classList.remove('sa'));
+  const el = document.getElementById('sa-'+col);
+  if (el) { el.textContent = sortDir === -1 ? '↓' : '↑'; el.closest('th').classList.add('sa'); }
   renderTable();
 }
 
-/* ── investigar (abre Claude) ───────────────────────────── */
-function investigar(ticker,varPct,pvp,dy){
-  window.open(`https://claude.ai/new?q=${encodeURIComponent('Sou analista de FIIs. Analise o '+ticker+' — variação hoje: '+varPct+', P/VP: '+pvp+', DY anual: '+dy+'%. Busque fatos relevantes recentes, comunicados ou eventos corporativos que expliquem o movimento e dê uma avaliação de curto prazo.')}`, '_blank');
+/* ─── INVESTIGAR ──────────────────────────────────────────────────────── */
+function investigar(ticker, varPct, pvp, caixa, lastRend) {
+  const q = `Analise o FII ${ticker}: variação hoje ${varPct}, P/VP ${pvp}, caixa ${caixa}%, último rendimento ${lastRend}. Busque fatos relevantes recentes e avalie o movimento.`;
+  window.open(`https://claude.ai/new?q=${encodeURIComponent(q)}`, '_blank');
 }
 
-/* ── init ───────────────────────────────────────────────── */
+/* ─── INIT ────────────────────────────────────────────────────────────── */
 loadData();
-setInterval(loadData, 5*60*1000);
+setInterval(loadData, 5 * 60 * 1000);
 </script>
 </body>
 </html>
