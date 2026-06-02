@@ -199,7 +199,7 @@
 <script>
 /* ── CONFIG ─────────────────────────────────────────────────────── */
 // Token brapi.dev — substitua pelo seu em https://brapi.dev (plano free funciona)
-const BRAPI_TOKEN = '2ZCy61RpNMhwi6vquG6xco';
+const BRAPI_TOKEN = 'demo';
 const BRAPI = `https://brapi.dev/api/quote/`;
 
 /* ── LISTA IFIX B3 OFICIAL ───────────────────────────────────────── */
@@ -270,7 +270,7 @@ async function fetchBrapiLote(tickers) {
   for (const lote of lotes) {
     try {
       const symbols = lote.join(',');
-      const url = `${BRAPI}${symbols}?token=${BRAPI_TOKEN}&range=1mo&interval=1d&fundamental=true&dividends=true`;
+      const url = `${BRAPI}${symbols}?token=${BRAPI_TOKEN}&range=1mo&interval=1d`;
       const r = await fetch(url);
       if (!r.ok) { done += lote.length; continue; }
       const j = await r.json();
@@ -284,10 +284,7 @@ async function fetchBrapiLote(tickers) {
         const vols     = hist.map(h => h.volume).filter(Boolean);
         const avgPx    = closes.length ? closes.reduce((a,b)=>a+b,0)/closes.length : price;
         const volMes   = avgPx ? vols.reduce((a,b)=>a+b,0) * avgPx : null;
-        out[tk] = { price, varPct: q.regularMarketChangePercent, volDia, volMes, spark: closes.slice(-30),
-                    bookValue: q.bookValue ?? null,
-                    lastDiv:   q.dividendsData?.cashDividends?.[0]?.rate ?? null,
-                    lastDivDate: q.dividendsData?.cashDividends?.[0]?.paymentDate ?? null };
+        out[tk] = { price, varPct: q.regularMarketChangePercent, volDia, volMes, spark: closes.slice(-30) };
         if (closes.length) sparkCache[tk] = closes.slice(-30);
       }
     } catch(e) { console.warn('brapi:', e.message); }
@@ -338,17 +335,12 @@ async function loadData() {
     const volMes   = mkt.volMes   ?? null;
     const spark    = mkt.spark?.length ? mkt.spark : (sparkCache[tk] || []);
 
-    // P/VP: preço ÷ bookValue (VP/cota) retornado pela brapi
-    // fallback: fiis.json (atualizado pelo Actions)
-    const vpCota   = mkt.bookValue ?? fd.vp ?? null;
+    // P/VP, caixa%, rendimento: vêm do fiis.json (atualizado pelo GitHub Actions)
+    const vpCota   = fd.vp ?? null;
     const pvp      = (price && vpCota) ? price / vpCota : (fd.pvp_live ?? null);
-
-    // Caixa%: só disponível via Actions (Status Invest) — brapi não tem
-    const caixa    = fd.caixa ?? null;
-
-    // Último rendimento: brapi dividendsData → fallback fiis.json
-    const lastRend = mkt.lastDiv     ?? fd.lastRend     ?? null;
-    const lastDate = mkt.lastDivDate ?? fd.lastRendDate ?? null;
+    const caixa    = fd.caixa        ?? null;
+    const lastRend = fd.lastRend     ?? null;
+    const lastDate = fd.lastRendDate ?? null;
 
     return { ticker:tk, seg, price, varPct, volDia, volMes, spark, pvp, caixa, lastRend, lastDate };
   });
