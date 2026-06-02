@@ -120,7 +120,7 @@
       <h1>FIIs <span>IFIX</span> Dashboard</h1>
       <div class="hdr-sub" id="ts">aguardando dados...</div>
     </div>
-    <span class="live load" id="live-dot">CARREGANDO</span>
+    <span class="live load" id="live-dot">AGUARDANDO</span>
   </header>
 
   <div class="sec-title">Resumo do dia</div>
@@ -175,7 +175,7 @@
         <th class="c-if" onclick="srt('vsIfix')">vs IFIX <span id="sa-vsIfix">↕</span></th>
       </tr></thead>
       <tbody id="tbody">
-        <tr class="load-row"><td colspan="11"><span class="spin"></span>Carregando dados...</td></tr>
+        <tr class="load-row"><td colspan="11">Clique em <strong>Atualizar</strong> para carregar os dados.</td></tr>
       </tbody>
     </table>
   </div>
@@ -199,7 +199,7 @@
 <script>
 /* ── CONFIG ─────────────────────────────────────────────────────── */
 // Token brapi.dev — substitua pelo seu em https://brapi.dev (plano free funciona)
-const BRAPI_TOKEN = '2ZCy61RpNMhwi6vquG6xco';
+const BRAPI_TOKEN = 'demo';
 const BRAPI = `https://brapi.dev/api/quote/`;
 
 /* ── LISTA IFIX B3 OFICIAL ───────────────────────────────────────── */
@@ -311,6 +311,50 @@ async function loadFundamentals() {
   } catch(e) { console.warn('fiis.json:', e.message); }
 }
 
+/* ── CACHE LOCAL (localStorage) ──────────────────────────────────── */
+const CACHE_KEY = 'fii_dashboard_cache';
+
+function saveCache(data, ifix, ts) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ data, ifix, ts }));
+  } catch(e) { console.warn('localStorage save:', e.message); }
+}
+
+function loadCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
+}
+
+function restoreFromCache() {
+  const cache = loadCache();
+  if (!cache || !cache.data?.length) return false;
+
+  allData  = cache.data;
+  ifixVar  = cache.ifix ?? 0;
+
+  // restaurar sparkCache
+  allData.forEach(d => { if (d.spark?.length) sparkCache[d.ticker] = d.spark; });
+
+  const ts = cache.ts ? new Date(cache.ts).toLocaleString('pt-BR') : '—';
+  document.getElementById('ts').textContent =
+    `Dados do cache · última busca: ${ts} · clique em Atualizar para buscar dados novos`;
+
+  const dot = document.getElementById('live-dot');
+  const nOk = allData.filter(d => d.price).length;
+  dot.textContent = nOk > 80 ? 'CACHE' : 'CACHE PARCIAL';
+  dot.className   = 'live load';
+
+  document.getElementById('tbl-count').textContent = allData.length + ' FIIs (cache)';
+
+  renderSummary();
+  renderTable();
+  renderNews();
+  renderSeg();
+  return true;
+}
+
 /* ── MAIN LOAD ───────────────────────────────────────────────────── */
 async function loadData() {
   document.getElementById('btn-ref').disabled = true;
@@ -335,7 +379,6 @@ async function loadData() {
     const volMes   = mkt.volMes   ?? null;
     const spark    = mkt.spark?.length ? mkt.spark : (sparkCache[tk] || []);
 
-    // P/VP, caixa%, rendimento: vêm do fiis.json (atualizado pelo GitHub Actions)
     const vpCota   = fd.vp ?? null;
     const pvp      = (price && vpCota) ? price / vpCota : (fd.pvp_live ?? null);
     const caixa    = fd.caixa        ?? null;
@@ -345,17 +388,20 @@ async function loadData() {
     return { ticker:tk, seg, price, varPct, volDia, volMes, spark, pvp, caixa, lastRend, lastDate };
   });
 
-  // vs IFIX: variação do FII menos média das variações do dia
+  // vs IFIX
   const withVar = allData.filter(d => d.varPct != null);
   ifixVar = withVar.length ? withVar.reduce((a,d)=>a+d.varPct,0)/withVar.length : 0;
   allData = allData.map(d => ({...d, vsIfix: d.varPct!=null ? d.varPct-ifixVar : null}));
 
-  const nOk  = allData.filter(d => d.price).length;
-  const now  = new Date().toLocaleTimeString('pt-BR');
+  // salvar no localStorage com timestamp
+  const ts = new Date().toISOString();
+  saveCache(allData, ifixVar, ts);
+
+  const nOk = allData.filter(d => d.price).length;
+  const now = new Date().toLocaleTimeString('pt-BR');
   document.getElementById('ts').textContent =
     `Atualizado às ${now} · ${nOk}/${IFIX.length} cotações · brapi.dev (~15min delay) · clique em Atualizar para recarregar`;
-  document.getElementById('tbl-count').textContent =
-    allData.length + ' FIIs';
+  document.getElementById('tbl-count').textContent = allData.length + ' FIIs';
 
   renderSummary();
   renderTable();
@@ -540,8 +586,10 @@ function investigar(ticker,varPct,pvp,caixa,lastRend){
 }
 
 /* ── INIT ────────────────────────────────────────────────────────── */
-// Atualização somente manual via botão — preserva cota do plano gratuito brapi
-loadData();
+// Tenta restaurar do cache local — se não tiver, mostra mensagem para clicar em Atualizar
+if (!restoreFromCache()) {
+  document.getElementById('ts').textContent = 'Clique em Atualizar para carregar os dados.';
+}
 </script>
 </body>
 </html>
