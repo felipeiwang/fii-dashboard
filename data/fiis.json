@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "updated": "2026-06-19",
+    "updated": "2026-06-20",
     "refMonth": "06/2026",
     "source": "Status Invest",
-    "tickerCount": 161,
+    "tickerCount": 162,
     "note": "Atualizado via GitHub Actions todo dia útil 18h BRT"
   },
   "KNCR11": {
@@ -135,6 +135,9 @@
     "lastDiv": 1.28,
     "divDate": "2025-05-15"
   },
+  "IRIM11": {
+    "seg": "CRI"
+  },
   "KNUQ11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -144,6 +147,9 @@
     "lastDiv": 1.12,
     "divDate": "2025-05-15"
   },
+  "BCFF11": {
+    "seg": "HYB"
+  },
   "GGRC11": {
     "seg": "LOG",
     "vpMonth": "06/2025",
@@ -152,9 +158,6 @@
     "dy": 9.6,
     "lastDiv": 0.98,
     "divDate": "2025-05-15"
-  },
-  "BCFF11": {
-    "seg": "HYB"
   },
   "RECR11": {
     "seg": "CRI",
@@ -227,15 +230,6 @@
     "lastDiv": 0.9,
     "divDate": "2025-05-20"
   },
-  "MCCI11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 10.12,
-    "dy": 13.2,
-    "lastDiv": 0.11,
-    "divDate": "2025-05-15"
-  },
   "LVBI11": {
     "seg": "LOG",
     "vpMonth": "06/2025",
@@ -261,6 +255,15 @@
     "seg": "LJ",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
+  },
+  "MCCI11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 10.12,
+    "dy": 13.2,
+    "lastDiv": 0.11,
+    "divDate": "2025-05-15"
   },
   "RBVA11": {
     "seg": "HYB",
