@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "updated": "2026-06-20",
+    "updated": "2026-06-23",
     "refMonth": "06/2026",
     "source": "Status Invest",
     "tickerCount": 162,
@@ -367,6 +367,14 @@
     "lastDiv": 0.7,
     "divDate": "2025-05-15"
   },
+  "RVBI11": {
+    "seg": "HYB"
+  },
+  "RBRY11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025"
+  },
   "VRTA11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -375,19 +383,6 @@
     "dy": 12.1,
     "lastDiv": 1.06,
     "divDate": "2025-05-15"
-  },
-  "RVBI11": {
-    "seg": "HYB"
-  },
-  "HSLG11": {
-    "seg": "LOG",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025"
-  },
-  "RBRY11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025"
   },
   "BRCR11": {
     "seg": "LJ",
@@ -400,6 +395,11 @@
   },
   "VCJR11": {
     "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025"
+  },
+  "HSLG11": {
+    "seg": "LOG",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
