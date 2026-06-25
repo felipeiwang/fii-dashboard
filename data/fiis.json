@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "updated": "2026-06-24",
+    "updated": "2026-06-25",
     "refMonth": "06/2026",
     "source": "Status Invest",
     "tickerCount": 162,
@@ -341,11 +341,6 @@
     "lastDiv": 1.1,
     "divDate": "2025-05-20"
   },
-  "RBRX11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025"
-  },
   "FEXC11": {
     "seg": "HYB"
   },
@@ -369,6 +364,11 @@
   },
   "RVBI11": {
     "seg": "HYB"
+  },
+  "RBRX11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025"
   },
   "RBRY11": {
     "seg": "CRI",
@@ -727,11 +727,6 @@
   "BPFF11": {
     "seg": "HYB"
   },
-  "RPRI11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025"
-  },
   "LGCP11": {
     "seg": "HYB"
   },
@@ -785,6 +780,11 @@
   },
   "AIEC11": {
     "seg": "HYB"
+  },
+  "RPRI11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025"
   },
   "VTLT11": {
     "seg": "HYB"
