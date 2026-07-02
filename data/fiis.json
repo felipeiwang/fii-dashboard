@@ -186,11 +186,6 @@
     "lastDiv": 0.92,
     "divDate": "2025-05-15"
   },
-  "BTHF11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025"
-  },
   "PVBI11": {
     "seg": "LJ",
     "vpMonth": "06/2025",
@@ -211,6 +206,11 @@
   },
   "GALG11": {
     "seg": "HYB"
+  },
+  "BTHF11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025"
   },
   "KNSC11": {
     "seg": "CRI",
