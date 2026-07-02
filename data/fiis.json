@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "updated": "2026-07-01",
+    "updated": "2026-07-02",
     "refMonth": "07/2026",
     "source": "Status Invest",
     "tickerCount": 162,
@@ -277,11 +277,6 @@
   "CVBI11": {
     "seg": "HYB"
   },
-  "VGIR11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025"
-  },
   "HGRE11": {
     "seg": "LJ",
     "vpMonth": "06/2025",
@@ -331,6 +326,11 @@
     "dy": 12.9,
     "lastDiv": 1.06,
     "divDate": "2025-05-20"
+  },
+  "VGIR11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025"
   },
   "RBRR11": {
     "seg": "CRI",
