@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "updated": "2026-07-20",
+    "updated": "2026-07-21",
     "refMonth": "07/2026",
     "source": "Status Invest",
     "tickerCount": 162,
@@ -607,13 +607,13 @@
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
-  "CLIN11": {
-    "seg": "LOG",
+  "RZAT11": {
+    "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
-  "RZAT11": {
-    "seg": "CRI",
+  "CLIN11": {
+    "seg": "LOG",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
