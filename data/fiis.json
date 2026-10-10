@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "updated": "2026-10-09",
+    "updated": "2026-10-10",
     "refMonth": "10/2026",
     "source": "Status Invest",
     "tickerCount": 186,
@@ -202,15 +202,6 @@
     "lastDiv": 1.28,
     "divDate": "2025-05-15"
   },
-  "CPTS11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 9.22,
-    "dy": 14.0,
-    "lastDiv": 0.1,
-    "divDate": "2025-05-15"
-  },
   "GARE11": {
     "seg": "SHO",
     "vpMonth": "06/2025",
@@ -218,6 +209,15 @@
     "vp": 108.4,
     "dy": 10.2,
     "lastDiv": 0.92,
+    "divDate": "2025-05-15"
+  },
+  "CPTS11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 9.22,
+    "dy": 14.0,
+    "lastDiv": 0.1,
     "divDate": "2025-05-15"
   },
   "HBCR11": {
