@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "updated": "2026-10-29",
+    "updated": "2026-10-30",
     "refMonth": "10/2026",
     "source": "Status Invest",
     "tickerCount": 183,
@@ -127,15 +127,6 @@
   "TRXB11": {
     "seg": "HYB"
   },
-  "BRCO11": {
-    "seg": "LOG",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 117.4,
-    "dy": 8.8,
-    "lastDiv": 0.86,
-    "divDate": "2025-05-15"
-  },
   "KNIP11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -143,6 +134,15 @@
     "vp": 106.4,
     "dy": 12.2,
     "lastDiv": 1.08,
+    "divDate": "2025-05-15"
+  },
+  "BRCO11": {
+    "seg": "LOG",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 117.4,
+    "dy": 8.8,
+    "lastDiv": 0.86,
     "divDate": "2025-05-15"
   },
   "VTLT11": {
@@ -160,15 +160,6 @@
   "JCIN11": {
     "seg": "HYB"
   },
-  "XPLG11": {
-    "seg": "LOG",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 114.6,
-    "dy": 9.3,
-    "lastDiv": 0.88,
-    "divDate": "2025-05-15"
-  },
   "HGBS11": {
     "seg": "SHO",
     "vpMonth": "06/2025",
@@ -185,6 +176,15 @@
     "vp": 120.4,
     "dy": 9.1,
     "lastDiv": 0.9,
+    "divDate": "2025-05-15"
+  },
+  "XPLG11": {
+    "seg": "LOG",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 114.6,
+    "dy": 9.3,
+    "lastDiv": 0.88,
     "divDate": "2025-05-15"
   },
   "KNRI11": {
