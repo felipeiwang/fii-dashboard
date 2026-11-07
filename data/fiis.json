@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "updated": "2026-11-06",
+    "updated": "2026-11-07",
     "refMonth": "11/2026",
     "source": "Status Invest",
     "tickerCount": 185,
@@ -133,6 +133,9 @@
     "lastDiv": 1.08,
     "divDate": "2025-05-15"
   },
+  "VTLT11": {
+    "seg": "HYB"
+  },
   "BRCO11": {
     "seg": "LOG",
     "vpMonth": "06/2025",
@@ -141,9 +144,6 @@
     "dy": 8.8,
     "lastDiv": 0.86,
     "divDate": "2025-05-15"
-  },
-  "VTLT11": {
-    "seg": "HYB"
   },
   "TRXB11": {
     "seg": "HYB"
@@ -157,6 +157,12 @@
     "lastDiv": 0.86,
     "divDate": "2025-05-15"
   },
+  "VXXV11": {
+    "seg": "HYB"
+  },
+  "JCIN11": {
+    "seg": "HYB"
+  },
   "XPLG11": {
     "seg": "LOG",
     "vpMonth": "06/2025",
@@ -165,12 +171,6 @@
     "dy": 9.3,
     "lastDiv": 0.88,
     "divDate": "2025-05-15"
-  },
-  "JCIN11": {
-    "seg": "HYB"
-  },
-  "VXXV11": {
-    "seg": "HYB"
   },
   "HGRU11": {
     "seg": "RES",
@@ -208,6 +208,9 @@
     "lastDiv": 1.06,
     "divDate": "2025-05-15"
   },
+  "CPOF11": {
+    "seg": "HYB"
+  },
   "HSML11": {
     "seg": "SHO",
     "vpMonth": "06/2025",
@@ -216,9 +219,6 @@
     "dy": 11.3,
     "lastDiv": 0.78,
     "divDate": "2025-05-20"
-  },
-  "CPOF11": {
-    "seg": "HYB"
   },
   "CDII11": {
     "seg": "HYB"
@@ -232,14 +232,14 @@
     "lastDiv": 0.1,
     "divDate": "2025-05-15"
   },
-  "MCCI11": {
+  "KNSC11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025",
-    "vp": 10.12,
-    "dy": 13.2,
-    "lastDiv": 0.11,
-    "divDate": "2025-05-15"
+    "vp": 100.4,
+    "dy": 13.1,
+    "lastDiv": 1.08,
+    "divDate": "2025-05-20"
   },
   "KNHY11": {
     "seg": "CRI",
@@ -261,15 +261,6 @@
   },
   "IRDM11": {
     "seg": "HYB"
-  },
-  "KNSC11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 100.4,
-    "dy": 13.1,
-    "lastDiv": 1.08,
-    "divDate": "2025-05-20"
   },
   "IRIM11": {
     "seg": "CRI"
@@ -295,13 +286,13 @@
     "lastDiv": 0.92,
     "divDate": "2025-05-15"
   },
-  "GALG11": {
-    "seg": "HYB"
-  },
   "BTHF11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
+  },
+  "GALG11": {
+    "seg": "HYB"
   },
   "PVBI11": {
     "seg": "LJ",
@@ -321,8 +312,14 @@
     "lastDiv": 0.9,
     "divDate": "2025-05-20"
   },
-  "BBPO11": {
-    "seg": "HYB"
+  "MCCI11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 10.12,
+    "dy": 13.2,
+    "lastDiv": 0.11,
+    "divDate": "2025-05-15"
   },
   "LVBI11": {
     "seg": "LOG",
@@ -333,14 +330,8 @@
     "lastDiv": 0.94,
     "divDate": "2025-05-15"
   },
-  "HFOF11": {
-    "seg": "HYB",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 90.2,
-    "dy": 9.6,
-    "lastDiv": 0.72,
-    "divDate": "2025-05-15"
+  "BBPO11": {
+    "seg": "HYB"
   },
   "PMLL11": {
     "seg": "CRI",
@@ -356,6 +347,15 @@
     "lastDiv": 1.06,
     "divDate": "2025-05-20"
   },
+  "HFOF11": {
+    "seg": "HYB",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 90.2,
+    "dy": 9.6,
+    "lastDiv": 0.72,
+    "divDate": "2025-05-15"
+  },
   "CVBI11": {
     "seg": "HYB"
   },
@@ -368,11 +368,6 @@
     "lastDiv": 0.98,
     "divDate": "2025-05-15"
   },
-  "TVRI11": {
-    "seg": "LJ",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025"
-  },
   "VILG11": {
     "seg": "LOG",
     "vpMonth": "06/2025",
@@ -382,14 +377,10 @@
     "lastDiv": 0.94,
     "divDate": "2025-05-20"
   },
-  "RZTR11": {
-    "seg": "CRI",
+  "TVRI11": {
+    "seg": "LJ",
     "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 106.4,
-    "dy": 11.0,
-    "lastDiv": 0.96,
-    "divDate": "2025-05-20"
+    "dyMonth": "06/2025"
   },
   "RBVA11": {
     "seg": "HYB",
@@ -404,6 +395,15 @@
     "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
+  },
+  "RZTR11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 106.4,
+    "dy": 11.0,
+    "lastDiv": 0.96,
+    "divDate": "2025-05-20"
   },
   "JSRE11": {
     "seg": "LJ",
@@ -425,14 +425,14 @@
   "RVBI11": {
     "seg": "HYB"
   },
-  "RBRR11": {
+  "VRTA11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025",
-    "vp": 100.4,
-    "dy": 13.3,
-    "lastDiv": 1.1,
-    "divDate": "2025-05-20"
+    "vp": 106.2,
+    "dy": 12.1,
+    "lastDiv": 1.06,
+    "divDate": "2025-05-15"
   },
   "BRCR11": {
     "seg": "LJ",
@@ -443,22 +443,22 @@
     "lastDiv": 0.64,
     "divDate": "2025-05-15"
   },
-  "RBRF11": {
-    "seg": "HYB"
-  },
-  "VRTA11": {
+  "RBRR11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025",
-    "vp": 106.2,
-    "dy": 12.1,
-    "lastDiv": 1.06,
-    "divDate": "2025-05-15"
+    "vp": 100.4,
+    "dy": 13.3,
+    "lastDiv": 1.1,
+    "divDate": "2025-05-20"
   },
   "RBRY11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
+  },
+  "RBRF11": {
+    "seg": "HYB"
   },
   "MCHY11": {
     "seg": "HYB"
@@ -577,6 +577,11 @@
   "CCME11": {
     "seg": "HYB"
   },
+  "RBRP11": {
+    "seg": "LJ",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025"
+  },
   "KFOF11": {
     "seg": "HYB",
     "vpMonth": "06/2025",
@@ -586,8 +591,13 @@
     "lastDiv": 0.09,
     "divDate": "2025-05-15"
   },
-  "RBRP11": {
-    "seg": "LJ",
+  "JSAF11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025"
+  },
+  "FATN11": {
+    "seg": "LOG",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
@@ -602,16 +612,6 @@
   },
   "BBIG11": {
     "seg": "LJ",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025"
-  },
-  "FATN11": {
-    "seg": "LOG",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025"
-  },
-  "JSAF11": {
-    "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
@@ -685,6 +685,11 @@
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
+  "ICRI11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025"
+  },
   "VINO11": {
     "seg": "LJ",
     "vpMonth": "06/2025",
@@ -694,21 +699,21 @@
     "lastDiv": 0.68,
     "divDate": "2025-05-20"
   },
-  "KISU11": {
-    "seg": "RES",
+  "RZAT11": {
+    "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
-  "RZAT11": {
-    "seg": "CRI",
+  "KISU11": {
+    "seg": "RES",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
   "MCHF11": {
     "seg": "HYB"
   },
-  "ICRI11": {
-    "seg": "CRI",
+  "MANA11": {
+    "seg": "LOG",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
@@ -718,23 +723,18 @@
   "RECT11": {
     "seg": "HYB"
   },
-  "BCIA11": {
-    "seg": "LOG",
+  "PORD11": {
+    "seg": "RES",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
-  "MANA11": {
+  "BCIA11": {
     "seg": "LOG",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
   "QAGR11": {
     "seg": "HYB"
-  },
-  "PORD11": {
-    "seg": "RES",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025"
   },
   "BCRI11": {
     "seg": "CRI",
@@ -750,12 +750,12 @@
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
-  "VRTM11": {
+  "KCRE11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
-  "KCRE11": {
+  "VRTM11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
@@ -777,13 +777,13 @@
   "INLG11": {
     "seg": "HYB"
   },
-  "LIFE11": {
-    "seg": "RES",
+  "TOPP11": {
+    "seg": "LJ",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
-  "TOPP11": {
-    "seg": "LJ",
+  "LIFE11": {
+    "seg": "RES",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
   },
@@ -836,11 +836,6 @@
   "GRUL11": {
     "seg": "HYB"
   },
-  "MFII11": {
-    "seg": "HYB",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025"
-  },
   "OUJP11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -849,6 +844,11 @@
     "dy": 12.8,
     "lastDiv": 1.04,
     "divDate": "2025-05-15"
+  },
+  "MFII11": {
+    "seg": "HYB",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025"
   },
   "URPR11": {
     "seg": "CRI",
@@ -868,12 +868,6 @@
   "RBHG11": {
     "seg": "HYB"
   },
-  "MORC11": {
-    "seg": "HYB"
-  },
-  "HGFF11": {
-    "seg": "HYB"
-  },
   "VGRI11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -883,13 +877,19 @@
     "lastDiv": 0.11,
     "divDate": "2025-05-15"
   },
-  "CPFF11": {
+  "MORC11": {
+    "seg": "HYB"
+  },
+  "HGFF11": {
     "seg": "HYB"
   },
   "HSAF11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025"
+  },
+  "CPFF11": {
+    "seg": "HYB"
   },
   "PLCR11": {
     "seg": "HYB"
