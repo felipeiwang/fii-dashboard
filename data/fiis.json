@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "updated": "2026-11-27",
+    "updated": "2026-11-28",
     "refMonth": "11/2026",
     "source": "Status Invest",
     "tickerCount": 188,
@@ -92,22 +92,16 @@
     "lastRend": 0.93,
     "lastRendDate": "30/10/2026"
   },
+  "HBCR11": {
+    "seg": "HYB",
+    "pvp_live": 1.11,
+    "lastRend": 2.0,
+    "lastRendDate": "16/11/2026"
+  },
   "TRXB11": {
     "seg": "HYB",
     "pvp_live": 1.79,
     "lastRend": 1.0,
-    "lastRendDate": "30/10/2026"
-  },
-  "KNCR11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 102.8,
-    "dy": 13.1,
-    "lastDiv": 1.12,
-    "divDate": "2025-05-15",
-    "pvp_live": 1.0,
-    "lastRend": 1.1,
     "lastRendDate": "30/10/2026"
   },
   "XPML11": {
@@ -122,6 +116,22 @@
     "lastRend": 0.8,
     "lastRendDate": "17/11/2026"
   },
+  "KNCR11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 102.8,
+    "dy": 13.1,
+    "lastDiv": 1.12,
+    "divDate": "2025-05-15",
+    "pvp_live": 1.0,
+    "lastRend": 1.1,
+    "lastRendDate": "30/10/2026"
+  },
+  "VXXV11": {
+    "seg": "HYB",
+    "pvp_live": 1.94
+  },
   "MXRF11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -133,12 +143,6 @@
     "pvp_live": 0.92,
     "lastRend": 0.095,
     "lastRendDate": "30/10/2026"
-  },
-  "HBCR11": {
-    "seg": "HYB",
-    "pvp_live": 1.11,
-    "lastRend": 2.0,
-    "lastRendDate": "16/11/2026"
   },
   "BTLG11": {
     "seg": "LOG",
@@ -180,6 +184,18 @@
     "seg": "HYB",
     "pvp_live": 0.82
   },
+  "SEED11": {
+    "seg": "HYB",
+    "pvp_live": 1.16,
+    "lastRend": 1.39,
+    "lastRendDate": "30/10/2026"
+  },
+  "VTLT11": {
+    "seg": "HYB",
+    "pvp_live": 0.98,
+    "lastRend": 1.26234904,
+    "lastRendDate": "18/12/2025"
+  },
   "GGRC11": {
     "seg": "LOG",
     "vpMonth": "06/2025",
@@ -192,12 +208,6 @@
     "lastRend": 0.1,
     "lastRendDate": "03/11/2026"
   },
-  "SEED11": {
-    "seg": "HYB",
-    "pvp_live": 1.16,
-    "lastRend": 1.39,
-    "lastRendDate": "30/10/2026"
-  },
   "KNIP11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -209,16 +219,6 @@
     "pvp_live": 0.93,
     "lastRend": 0.71,
     "lastRendDate": "30/10/2026"
-  },
-  "VTLT11": {
-    "seg": "HYB",
-    "pvp_live": 0.98,
-    "lastRend": 1.26234904,
-    "lastRendDate": "18/12/2025"
-  },
-  "VXXV11": {
-    "seg": "HYB",
-    "pvp_live": 1.94
   },
   "JCIN11": {
     "seg": "HYB",
@@ -244,6 +244,18 @@
   "CDII11": {
     "seg": "HYB"
   },
+  "CPTS11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 9.22,
+    "dy": 14.0,
+    "lastDiv": 0.1,
+    "divDate": "2025-05-15",
+    "pvp_live": 0.76,
+    "lastRend": 0.09,
+    "lastRendDate": "16/11/2026"
+  },
   "KNRI11": {
     "seg": "LJ",
     "vpMonth": "06/2025",
@@ -254,6 +266,18 @@
     "divDate": "2025-05-15",
     "pvp_live": 0.88,
     "lastRend": 1.1,
+    "lastRendDate": "30/10/2026"
+  },
+  "VISC11": {
+    "seg": "SHO",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 110.2,
+    "dy": 10.1,
+    "lastDiv": 0.86,
+    "divDate": "2025-05-15",
+    "pvp_live": 0.83,
+    "lastRend": 0.84,
     "lastRendDate": "30/10/2026"
   },
   "XPLG11": {
@@ -268,42 +292,6 @@
     "lastRend": 0.82,
     "lastRendDate": "30/10/2026"
   },
-  "CPTS11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 9.22,
-    "dy": 14.0,
-    "lastDiv": 0.1,
-    "divDate": "2025-05-15",
-    "pvp_live": 0.76,
-    "lastRend": 0.09,
-    "lastRendDate": "16/11/2026"
-  },
-  "VISC11": {
-    "seg": "SHO",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 110.2,
-    "dy": 10.1,
-    "lastDiv": 0.86,
-    "divDate": "2025-05-15",
-    "pvp_live": 0.83,
-    "lastRend": 0.84,
-    "lastRendDate": "30/10/2026"
-  },
-  "GARE11": {
-    "seg": "SHO",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 108.4,
-    "dy": 10.2,
-    "lastDiv": 0.92,
-    "divDate": "2025-05-15",
-    "pvp_live": 0.87,
-    "lastRend": 0.083,
-    "lastRendDate": "30/10/2026"
-  },
   "MCCI11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -316,16 +304,16 @@
     "lastRend": 1.0,
     "lastRendDate": "12/11/2026"
   },
-  "HGRU11": {
-    "seg": "RES",
+  "HGBS11": {
+    "seg": "SHO",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025",
-    "vp": 120.4,
-    "dy": 9.1,
-    "lastDiv": 0.9,
+    "vp": 200.2,
+    "dy": 7.6,
+    "lastDiv": 1.28,
     "divDate": "2025-05-15",
-    "pvp_live": 0.88,
-    "lastRend": 0.95,
+    "pvp_live": 0.83,
+    "lastRend": 0.17,
     "lastRendDate": "30/10/2026"
   },
   "KNHY11": {
@@ -340,16 +328,16 @@
     "lastRend": 0.86,
     "lastRendDate": "30/10/2026"
   },
-  "HGBS11": {
-    "seg": "SHO",
+  "HGRU11": {
+    "seg": "RES",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025",
-    "vp": 200.2,
-    "dy": 7.6,
-    "lastDiv": 1.28,
+    "vp": 120.4,
+    "dy": 9.1,
+    "lastDiv": 0.9,
     "divDate": "2025-05-15",
-    "pvp_live": 0.83,
-    "lastRend": 0.17,
+    "pvp_live": 0.88,
+    "lastRend": 0.95,
     "lastRendDate": "30/10/2026"
   },
   "KNUQ11": {
@@ -362,6 +350,18 @@
     "divDate": "2025-05-15",
     "pvp_live": 0.94,
     "lastRend": 1.06,
+    "lastRendDate": "30/10/2026"
+  },
+  "GARE11": {
+    "seg": "SHO",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 108.4,
+    "dy": 10.2,
+    "lastDiv": 0.92,
+    "divDate": "2025-05-15",
+    "pvp_live": 0.87,
+    "lastRend": 0.083,
     "lastRendDate": "30/10/2026"
   },
   "IRDM11": {
@@ -406,6 +406,18 @@
     "lastRend": 0.7636,
     "lastRendDate": "09/11/2026"
   },
+  "PVBI11": {
+    "seg": "LJ",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 102.6,
+    "dy": 8.4,
+    "lastDiv": 0.78,
+    "divDate": "2025-05-15",
+    "pvp_live": 0.57,
+    "lastRend": 0.37,
+    "lastRendDate": "30/10/2026"
+  },
   "KNHF11": {
     "seg": "HYB",
     "vpMonth": "06/2025",
@@ -438,6 +450,12 @@
     "lastRend": 0.101,
     "lastRendDate": "09/11/2026"
   },
+  "GALG11": {
+    "seg": "HYB",
+    "pvp_live": 0.87,
+    "lastRend": 0.083,
+    "lastRendDate": "30/10/2026"
+  },
   "LVBI11": {
     "seg": "LOG",
     "vpMonth": "06/2025",
@@ -448,24 +466,6 @@
     "divDate": "2025-05-15",
     "pvp_live": 0.82,
     "lastRend": 0.8,
-    "lastRendDate": "30/10/2026"
-  },
-  "PVBI11": {
-    "seg": "LJ",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 102.6,
-    "dy": 8.4,
-    "lastDiv": 0.78,
-    "divDate": "2025-05-15",
-    "pvp_live": 0.57,
-    "lastRend": 0.37,
-    "lastRendDate": "30/10/2026"
-  },
-  "GALG11": {
-    "seg": "HYB",
-    "pvp_live": 0.87,
-    "lastRend": 0.083,
     "lastRendDate": "30/10/2026"
   },
   "ALZR11": {
@@ -491,6 +491,18 @@
     "vpMonth": "06/2025",
     "dyMonth": "06/2025",
     "pvp_live": 0.82,
+    "lastRend": 1.0,
+    "lastRendDate": "30/10/2026"
+  },
+  "HGCR11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 100.2,
+    "dy": 12.9,
+    "lastDiv": 1.06,
+    "divDate": "2025-05-20",
+    "pvp_live": 0.86,
     "lastRend": 1.0,
     "lastRendDate": "30/10/2026"
   },
@@ -524,18 +536,6 @@
     "lastRend": 0.73,
     "lastRendDate": "10/11/2026"
   },
-  "HGCR11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 100.2,
-    "dy": 12.9,
-    "lastDiv": 1.06,
-    "divDate": "2025-05-20",
-    "pvp_live": 0.86,
-    "lastRend": 1.0,
-    "lastRendDate": "30/10/2026"
-  },
   "RBVA11": {
     "seg": "HYB",
     "vpMonth": "06/2025",
@@ -546,14 +546,6 @@
     "divDate": "2025-05-15",
     "pvp_live": 0.7,
     "lastRend": 0.09,
-    "lastRendDate": "30/10/2026"
-  },
-  "TVRI11": {
-    "seg": "LJ",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "pvp_live": 0.8,
-    "lastRend": 1.05,
     "lastRendDate": "30/10/2026"
   },
   "HFOF11": {
@@ -568,25 +560,13 @@
     "lastRend": 0.06,
     "lastRendDate": "30/10/2026"
   },
-  "JSRE11": {
+  "TVRI11": {
     "seg": "LJ",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025",
-    "vp": 96.2,
-    "dy": 8.2,
-    "lastDiv": 0.7,
-    "divDate": "2025-05-15",
-    "pvp_live": 0.56,
-    "lastRend": 0.5,
+    "pvp_live": 0.8,
+    "lastRend": 1.05,
     "lastRendDate": "30/10/2026"
-  },
-  "VGIR11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "pvp_live": 0.83,
-    "lastRend": 0.119,
-    "lastRendDate": "12/11/2026"
   },
   "RZTR11": {
     "seg": "CRI",
@@ -598,6 +578,26 @@
     "divDate": "2025-05-20",
     "pvp_live": 0.66,
     "lastRend": 0.85,
+    "lastRendDate": "30/10/2026"
+  },
+  "VGIR11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "pvp_live": 0.83,
+    "lastRend": 0.119,
+    "lastRendDate": "12/11/2026"
+  },
+  "JSRE11": {
+    "seg": "LJ",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 96.2,
+    "dy": 8.2,
+    "lastDiv": 0.7,
+    "divDate": "2025-05-15",
+    "pvp_live": 0.56,
+    "lastRend": 0.5,
     "lastRendDate": "30/10/2026"
   },
   "FEXC11": {
@@ -678,6 +678,14 @@
     "lastRend": 0.08,
     "lastRendDate": "16/11/2026"
   },
+  "HSLG11": {
+    "seg": "LOG",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "pvp_live": 0.64,
+    "lastRend": 0.65,
+    "lastRendDate": "30/10/2026"
+  },
   "MCHY11": {
     "seg": "HYB",
     "pvp_live": 0.66,
@@ -694,14 +702,6 @@
     "divDate": "2025-05-15",
     "pvp_live": 0.74,
     "lastRend": 0.9,
-    "lastRendDate": "30/10/2026"
-  },
-  "HSLG11": {
-    "seg": "LOG",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "pvp_live": 0.64,
-    "lastRend": 0.65,
     "lastRendDate": "30/10/2026"
   },
   "VCJR11": {
@@ -738,17 +738,6 @@
     "lastRend": 0.55,
     "lastRendDate": "12/11/2026"
   },
-  "SDIL11": {
-    "seg": "HYB",
-    "pvp_live": 0.53,
-    "lastRend": 0.44,
-    "lastRendDate": "30/10/2026"
-  },
-  "MGFF11": {
-    "seg": "HYB",
-    "lastRend": 4.26048635,
-    "lastRendDate": "30/01/2024"
-  },
   "TGAR11": {
     "seg": "LOG",
     "vpMonth": "06/2025",
@@ -760,6 +749,17 @@
     "pvp_live": 0.28,
     "lastRend": 0.46,
     "lastRendDate": "30/10/2026"
+  },
+  "SDIL11": {
+    "seg": "HYB",
+    "pvp_live": 0.53,
+    "lastRend": 0.44,
+    "lastRendDate": "30/10/2026"
+  },
+  "MGFF11": {
+    "seg": "HYB",
+    "lastRend": 4.26048635,
+    "lastRendDate": "30/01/2024"
   },
   "GZIT11": {
     "seg": "SHO",
@@ -785,14 +785,6 @@
     "lastRend": 0.05,
     "lastRendDate": "30/10/2026"
   },
-  "BROF11": {
-    "seg": "LJ",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "pvp_live": 0.5,
-    "lastRend": 0.57,
-    "lastRendDate": "18/11/2026"
-  },
   "XPCI11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -804,6 +796,14 @@
     "pvp_live": 0.86,
     "lastRend": 0.82,
     "lastRendDate": "30/10/2026"
+  },
+  "BROF11": {
+    "seg": "LJ",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "pvp_live": 0.5,
+    "lastRend": 0.57,
+    "lastRendDate": "18/11/2026"
   },
   "BPML11": {
     "seg": "SHO",
@@ -851,14 +851,6 @@
     "lastRend": 0.35,
     "lastRendDate": "09/11/2026"
   },
-  "BBIG11": {
-    "seg": "LJ",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "pvp_live": 0.52,
-    "lastRend": 0.04,
-    "lastRendDate": "30/10/2026"
-  },
   "KFOF11": {
     "seg": "HYB",
     "vpMonth": "06/2025",
@@ -879,6 +871,14 @@
     "lastRend": 0.08,
     "lastRendDate": "30/10/2026"
   },
+  "BBIG11": {
+    "seg": "LJ",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "pvp_live": 0.52,
+    "lastRend": 0.04,
+    "lastRendDate": "30/10/2026"
+  },
   "FATN11": {
     "seg": "LOG",
     "vpMonth": "06/2025",
@@ -886,18 +886,6 @@
     "pvp_live": 0.78,
     "lastRend": 0.8,
     "lastRendDate": "06/11/2026"
-  },
-  "AFHI11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 100.4,
-    "dy": 13.4,
-    "lastDiv": 1.1,
-    "divDate": "2025-05-20",
-    "pvp_live": 0.96,
-    "lastRend": 0.97,
-    "lastRendDate": "16/11/2026"
   },
   "HABT11": {
     "seg": "RES",
@@ -910,6 +898,18 @@
     "pvp_live": 0.61,
     "lastRend": 0.92,
     "lastRendDate": "30/10/2026"
+  },
+  "AFHI11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 100.4,
+    "dy": 13.4,
+    "lastDiv": 1.1,
+    "divDate": "2025-05-20",
+    "pvp_live": 0.96,
+    "lastRend": 0.97,
+    "lastRendDate": "16/11/2026"
   },
   "RCRB11": {
     "seg": "LJ",
@@ -978,12 +978,6 @@
     "lastRend": 1.2,
     "lastRendDate": "30/10/2026"
   },
-  "BARI11": {
-    "seg": "HYB",
-    "pvp_live": 1.01,
-    "lastRend": 4.38101641,
-    "lastRendDate": "02/09/2025"
-  },
   "CLIN11": {
     "seg": "LOG",
     "vpMonth": "06/2025",
@@ -991,6 +985,12 @@
     "pvp_live": 0.82,
     "lastRend": 0.9,
     "lastRendDate": "10/11/2026"
+  },
+  "BARI11": {
+    "seg": "HYB",
+    "pvp_live": 1.01,
+    "lastRend": 4.38101641,
+    "lastRendDate": "02/09/2025"
   },
   "TEPP11": {
     "seg": "LJ",
@@ -1012,14 +1012,6 @@
     "lastRend": 0.046,
     "lastRendDate": "30/10/2026"
   },
-  "ICRI11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "pvp_live": 0.81,
-    "lastRend": 1.05,
-    "lastRendDate": "30/10/2026"
-  },
   "KISU11": {
     "seg": "RES",
     "vpMonth": "06/2025",
@@ -1034,13 +1026,13 @@
     "lastRend": 2.58857898,
     "lastRendDate": "28/03/2024"
   },
-  "RZAT11": {
+  "ICRI11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025",
-    "pvp_live": 0.69,
-    "lastRend": 1.0,
-    "lastRendDate": "16/11/2026"
+    "pvp_live": 0.81,
+    "lastRend": 1.05,
+    "lastRendDate": "30/10/2026"
   },
   "MANA11": {
     "seg": "LOG",
@@ -1057,6 +1049,14 @@
     "pvp_live": 0.53,
     "lastRend": 0.44,
     "lastRendDate": "30/10/2026"
+  },
+  "RZAT11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "pvp_live": 0.69,
+    "lastRend": 1.0,
+    "lastRendDate": "16/11/2026"
   },
   "PATL11": {
     "seg": "HYB",
@@ -1078,28 +1078,6 @@
     "lastRend": 0.86,
     "lastRendDate": "30/10/2026"
   },
-  "QAGR11": {
-    "seg": "HYB",
-    "pvp_live": 0.88,
-    "lastRend": 0.68,
-    "lastRendDate": "30/10/2026"
-  },
-  "KCRE11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "pvp_live": 0.84,
-    "lastRend": 0.07,
-    "lastRendDate": "30/10/2026"
-  },
-  "PORD11": {
-    "seg": "RES",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "pvp_live": 0.83,
-    "lastRend": 0.0935,
-    "lastRendDate": "30/10/2026"
-  },
   "BCRI11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -1112,12 +1090,34 @@
     "lastRend": 0.7,
     "lastRendDate": "30/10/2026"
   },
+  "QAGR11": {
+    "seg": "HYB",
+    "pvp_live": 0.88,
+    "lastRend": 0.68,
+    "lastRendDate": "30/10/2026"
+  },
   "CYCR11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
     "dyMonth": "06/2025",
     "pvp_live": 0.82,
     "lastRend": 0.106,
+    "lastRendDate": "30/10/2026"
+  },
+  "PORD11": {
+    "seg": "RES",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "pvp_live": 0.83,
+    "lastRend": 0.0935,
+    "lastRendDate": "30/10/2026"
+  },
+  "KCRE11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "pvp_live": 0.84,
+    "lastRend": 0.07,
     "lastRendDate": "30/10/2026"
   },
   "VRTM11": {
@@ -1188,12 +1188,6 @@
     "lastRend": 0.38,
     "lastRendDate": "30/10/2026"
   },
-  "HGPO11": {
-    "seg": "HYB",
-    "pvp_live": 0.91,
-    "lastRend": 1.20087917,
-    "lastRendDate": "01/07/2026"
-  },
   "WHGR11": {
     "seg": "SHO",
     "vpMonth": "06/2025",
@@ -1205,6 +1199,12 @@
     "pvp_live": 0.79,
     "lastRend": 0.1,
     "lastRendDate": "30/10/2026"
+  },
+  "HGPO11": {
+    "seg": "HYB",
+    "pvp_live": 0.91,
+    "lastRend": 1.20087917,
+    "lastRendDate": "01/07/2026"
   },
   "LIFE11": {
     "seg": "RES",
@@ -1250,6 +1250,12 @@
     "lastRend": 0.37333181,
     "lastRendDate": "27/03/2024"
   },
+  "RBHG11": {
+    "seg": "HYB",
+    "pvp_live": 0.6,
+    "lastRend": 0.75,
+    "lastRendDate": "30/10/2026"
+  },
   "DEVA11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -1262,10 +1268,35 @@
     "lastRend": 0.26,
     "lastRendDate": "09/11/2026"
   },
-  "RBHG11": {
+  "MORC11": {
     "seg": "HYB",
+    "lastRend": 3.07919409,
+    "lastRendDate": "27/03/2024"
+  },
+  "HGFF11": {
+    "seg": "HYB",
+    "pvp_live": 0.88,
+    "lastRend": 1.98289016,
+    "lastRendDate": "02/10/2025"
+  },
+  "MFII11": {
+    "seg": "HYB",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "pvp_live": 0.27,
+    "lastRend": 0.3,
+    "lastRendDate": "30/10/2026"
+  },
+  "VGRI11": {
+    "seg": "CRI",
+    "vpMonth": "06/2025",
+    "dyMonth": "06/2025",
+    "vp": 9.82,
+    "dy": 13.8,
+    "lastDiv": 0.11,
+    "divDate": "2025-05-15",
     "pvp_live": 0.6,
-    "lastRend": 0.75,
+    "lastRend": 0.075,
     "lastRendDate": "30/10/2026"
   },
   "URPR11": {
@@ -1280,29 +1311,6 @@
     "lastRend": 0.3,
     "lastRendDate": "30/10/2026"
   },
-  "MORC11": {
-    "seg": "HYB",
-    "lastRend": 3.07919409,
-    "lastRendDate": "27/03/2024"
-  },
-  "VGRI11": {
-    "seg": "CRI",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "vp": 9.82,
-    "dy": 13.8,
-    "lastDiv": 0.11,
-    "divDate": "2025-05-15",
-    "pvp_live": 0.6,
-    "lastRend": 0.075,
-    "lastRendDate": "30/10/2026"
-  },
-  "HGFF11": {
-    "seg": "HYB",
-    "pvp_live": 0.88,
-    "lastRend": 1.98289016,
-    "lastRendDate": "02/10/2025"
-  },
   "OUJP11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -1315,6 +1323,12 @@
     "lastRend": 0.85,
     "lastRendDate": "13/11/2026"
   },
+  "CPFF11": {
+    "seg": "HYB",
+    "pvp_live": 1.12,
+    "lastRend": 4.98805679,
+    "lastRendDate": "17/06/2025"
+  },
   "HSAF11": {
     "seg": "CRI",
     "vpMonth": "06/2025",
@@ -1323,25 +1337,11 @@
     "lastRend": 0.95,
     "lastRendDate": "30/10/2026"
   },
-  "CPFF11": {
-    "seg": "HYB",
-    "pvp_live": 1.12,
-    "lastRend": 4.98805679,
-    "lastRendDate": "17/06/2025"
-  },
   "PLCR11": {
     "seg": "HYB",
     "pvp_live": 0.94,
     "lastRend": 5.23251838,
     "lastRendDate": "02/09/2025"
-  },
-  "MFII11": {
-    "seg": "HYB",
-    "vpMonth": "06/2025",
-    "dyMonth": "06/2025",
-    "pvp_live": 0.27,
-    "lastRend": 0.3,
-    "lastRendDate": "30/10/2026"
   },
   "RBFF11": {
     "seg": "HYB",
